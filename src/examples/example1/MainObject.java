@@ -2,21 +2,21 @@ package examples.example1;
 
 import engine.Game;
 import engine.GameSettings;
-import engine.entity.Entity;
-import engine.entity.LightSource;
-import engine.entity.Terrain;
-import engine.entity.WaterTile;
+import engine.entity.*;
 import engine.model.TexturedModel;
+import engine.model.loaders.FontLoader;
 import engine.model.loaders.ObjLoader;
 import engine.model.loaders.TerrainGenerator;
 import engine.model.loaders.TextureLoader;
 import engine.renderer.StaticRenderer;
 import engine.scene.Scene;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class MainObject extends Game {
 
-    private Entity arrow;
+    static Entity arrow;
+    public static Text text;
 
     public MainObject(GameSettings gameSettings) {
         super(gameSettings);
@@ -25,6 +25,8 @@ public class MainObject extends Game {
 
     @Override
     public void load() {
+
+
         this.currentScene = new Scene();
         Dragon d = new Dragon();
         d.setPosition(new Vector3f(0, 0, 0));
@@ -47,9 +49,13 @@ public class MainObject extends Game {
         t.setPosition(new Vector3f(-250, -50, -250));
         this.currentScene.add(t);
 
-        this.currentScene.add(new WaterTile(new Vector3f(0, -15, 0), 300, this.currentScene));
+        WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
+        this.currentScene.add(water);
 
-        //DataDisplay.showWindow();
+        text = new Text(FontLoader.loadFromSys("Monaco"));
+
+        GuiElement guiElement = new GuiElement(text.getFbo().getTexture(), new Vector2f(-0.9f, 0.96f), new Vector2f(0.08f, 0.03f));
+        this.currentScene.add(guiElement);
 
         LightSource sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
@@ -60,7 +66,6 @@ public class MainObject extends Game {
 
     public void tick(double deltaT) {
         super.tick(deltaT);
-        this.renderer.guiRenderer.render(this.currentScene.getGuiElements());
         this.currentScene.getCamera().checkMovementInput(deltaT);
     }
 }

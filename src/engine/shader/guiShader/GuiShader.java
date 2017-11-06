@@ -10,9 +10,8 @@ public class GuiShader extends Shader {
 
     private final static String vertexShaderFile = "src/engine/shader/guiShader/vertexShader.glsl";
     private final static String fragmentShaderFile = "src/engine/shader/guiShader/fragmentShader.glsl";
-    private int location_scale;
     private int location_viewMatrix;
-    private int location_projectionMatrix;
+    private int location_transformationMatrix;
 
     public GuiShader() {
         super(vertexShaderFile, fragmentShaderFile);
@@ -27,12 +26,12 @@ public class GuiShader extends Shader {
     @Override
     protected void getAllUniformLocations() {
         location_viewMatrix = super.getUniformLocation("viewMatrix");
-        location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+        location_transformationMatrix = super.getUniformLocation("transformationMatrix");
     }
 
 
-    public void loadProjectionMatrix(Matrix4f matrix) {
-        super.loadMatrix(location_projectionMatrix, matrix);
+    public void loadTransformationMatrix(Matrix4f matrix) {
+        super.loadMatrix(location_transformationMatrix, matrix);
     }
 
     public void loadViewMatrix(Camera c) {

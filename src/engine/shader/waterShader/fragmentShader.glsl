@@ -24,7 +24,7 @@ void main(void) {
 
     vec3 viewVector = normalize(vecToCamera);
     float fresnelDot = dot(viewVector, vec3(0.0,1.0,0.0));
-    float fresnel = pow(fresnelDot,1);
+    float fresnel = pow(fresnelDot,0.5);
 
     vec2 ndc = ((vec2(clipSpace.x,clipSpace.y*-1.0)/clipSpace.w)/2.0 + 0.5);
 
@@ -44,6 +44,8 @@ void main(void) {
 
     reflectionTextureColor = texture(reflectionTexture, reflectionCoords);
     refractionTextureColor = texture(refractionTexture, refractionCoords);
-
-    out_Color = mix(reflectionTextureColor, refractionTextureColor,  fresnel);
+    vec4 color = mix(reflectionTextureColor, refractionTextureColor,  fresnel);
+    color.x-=0.1;
+    color.y-=0.1;
+    out_Color = color;
 }

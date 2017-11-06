@@ -1,6 +1,7 @@
 package engine;
 
 import common.Logger;
+import examples.example1.MainObject;
 
 public abstract class GameLoop extends Thread {
     private long lastLoopTime = System.nanoTime();
@@ -32,7 +33,7 @@ public abstract class GameLoop extends Thread {
             // update our FPS counter if a second has passed since
             // we last recorded
             if (lastFpsTime >= 1000000000) {
-                Logger.debug("(FPS: " + fps + ")");
+                MainObject.text.setText("FPS:"+fps);
                 lastFpsTime = 0;
                 fps = 0;
             }

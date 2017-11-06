@@ -42,7 +42,7 @@ public class GuiElement {
         this.size = size;
     }
 
-    public Matrix4f createProjectionMatrix() {
+    public Matrix4f createTransformationMatrix() {
         Matrix4f matrix = new Matrix4f();
         matrix.translate(new Vector3f(position.x, position.y, 0));
         matrix.rotate((float) Math.toRadians((double) 90), new Vector3f(1.0F, 0.0F, 0.0F));

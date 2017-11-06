@@ -1,5 +1,6 @@
 package examples.example1;
 
+import common.Logger;
 import engine.entity.Entity;
 import engine.entity.Simulated;
 import engine.model.Texture;

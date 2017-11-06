@@ -14,7 +14,7 @@ public class Main {
 
         GameSettings settings = new GameSettings();
         settings.windowDimensions = new Vector2i(1280, 800);
-        settings.backgroundColor = new Vector3f(0, 255, 0);
+        settings.backgroundColor = new Vector3f(0, 0, 0);
 
         new MainObject(settings);
 

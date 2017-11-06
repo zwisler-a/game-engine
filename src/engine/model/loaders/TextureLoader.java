@@ -2,7 +2,6 @@ package engine.model.loaders;
 
 import engine.model.Texture;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL12;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,8 +15,11 @@ public class TextureLoader {
     private static final int BYTES_PER_PIXEL = 4;//3 for RGB, 4 for RGBA
 
     public static Texture loadTexture(String path) {
+        return loadTexture(TextureLoader.loadImage(path));
+    }
 
-        BufferedImage image = TextureLoader.loadImage(path);
+    public static Texture loadTexture(BufferedImage image) {
+
 
         int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());

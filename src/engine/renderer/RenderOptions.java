@@ -19,10 +19,12 @@ public class RenderOptions {
         guiRenderer = true;
     }
 
+
     public RenderOptions(boolean staticRenderer, boolean skyboxRenderer, boolean waterRenderer, boolean guiRenderer) {
         this.staticRenderer = staticRenderer;
         this.skyboxRenderer = skyboxRenderer;
         this.waterRenderer = waterRenderer;
         this.guiRenderer = guiRenderer;
     }
+
 }

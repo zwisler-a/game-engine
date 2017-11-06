@@ -55,7 +55,7 @@ public class MouseHandler {
             glfwSetCursorPos(windowId, width[0] / 2, height[0] / 2);
         }
 
-        if (rotX || rotY) {
+        if ((rotX || rotY) && mouseLocked) {
             return new Vector2d(deltaX, deltaY);
         } else {
             return new Vector2d();

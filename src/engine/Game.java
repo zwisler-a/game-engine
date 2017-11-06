@@ -40,7 +40,9 @@ public abstract class Game extends GameLoop {
         if (glErrorCode != GL_NO_ERROR) {
             Logger.error("GL Error: " + glErrorCode);
         }
-
+        if(WindowManager.shouldClose()){
+            this.stopGameLoop();
+        }
     }
 
     public abstract void load();

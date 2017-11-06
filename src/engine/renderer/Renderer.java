@@ -1,6 +1,7 @@
 package engine.renderer;
 
 import engine.scene.Scene;
+import examples.example1.MainObject;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -13,15 +14,16 @@ public class Renderer {
 
 
     public Renderer() {
-        Matrix4f projectionMatrix = this.createProjectionMatrix(1280, 800);
+        Matrix4f projectionMatrix = Renderer.createProjectionMatrix(1280, 800);
         this.staticRenderer = new StaticRenderer(projectionMatrix);
         this.skyboxRenderer = new SkyboxRenderer(projectionMatrix);
         this.waterRenderer = new WaterRenderer(projectionMatrix);
-        this.guiRenderer = new GuiRenderer(projectionMatrix);
+        this.guiRenderer = new GuiRenderer();
 
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glCullFace(GL11.GL_BACK);
 
     }
@@ -33,14 +35,15 @@ public class Renderer {
         if (options.skyboxRenderer)
             this.skyboxRenderer.render(scene.getCamera());
         if (options.staticRenderer)
-            this.staticRenderer.render(scene.getEntities(StaticRenderer.class), scene.getLightSources(), scene.getCamera(),options);
+            this.staticRenderer.render(scene.getEntities(StaticRenderer.class), scene.getLightSources(), scene.getCamera(), options);
         if (options.waterRenderer)
             this.waterRenderer.render(scene, this);
         if (options.guiRenderer)
             this.guiRenderer.render(scene.getGuiElements());
+
     }
 
-    private Matrix4f createProjectionMatrix(float width, float height) {
+    public static Matrix4f createProjectionMatrix(float width, float height) {
         Matrix4f projectionMatrix = new Matrix4f();
         float fieldOfView = 70f;
         float aspectRatio = width / height;
