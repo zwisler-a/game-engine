@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import engine.Game;
 import engine.scene.Scene;
 import examples.example1.MainObject;
 import org.joml.Matrix4f;
@@ -14,7 +15,7 @@ public class Renderer {
 
 
     public Renderer() {
-        Matrix4f projectionMatrix = Renderer.createProjectionMatrix(1280, 800);
+        Matrix4f projectionMatrix = Renderer.createProjectionMatrix(Game.gameSettings.resolutionX, Game.gameSettings.resolutionY);
         this.staticRenderer = new StaticRenderer(projectionMatrix);
         this.skyboxRenderer = new SkyboxRenderer(projectionMatrix);
         this.waterRenderer = new WaterRenderer(projectionMatrix);

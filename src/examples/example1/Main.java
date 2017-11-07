@@ -13,8 +13,10 @@ public class Main {
         Logger.debug("Start ...");
 
         GameSettings settings = new GameSettings();
-        settings.windowDimensions = new Vector2i(1280, 800);
+        settings.windowDimensions = new Vector2i(400, 200);
         settings.backgroundColor = new Vector3f(0, 0, 0);
+        settings.resolutionX = 1280;
+        settings.resolutionY = 800;
 
         new MainObject(settings);
 

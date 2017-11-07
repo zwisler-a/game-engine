@@ -17,7 +17,7 @@ public class Logger {
 
     public static void error(String s) {
         if (loggingLevel >= ERROR) {
-            System.out.println(s);
+            System.err.println(s);
         }
     }
 

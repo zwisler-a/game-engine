@@ -3,17 +3,16 @@ package engine.renderer.framebuffer;
 import common.Logger;
 import engine.WindowManager;
 import engine.model.Texture;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.*;
 
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
-import static org.lwjgl.opengl.GL30.glBindFramebuffer;
+import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
+import static org.lwjgl.opengl.GL30.*;
+
+//TODO  cleanup !
 
 public class FrameBuffer {
 
@@ -23,13 +22,45 @@ public class FrameBuffer {
     private int width, height;
 
     public FrameBuffer(int width, int height) {
+        this.init(width,height, true, true ,false);
+
+
+        this.checkFrameBufferObject();
+        this.unbind();
+    }
+
+    public FrameBuffer(int width, int height, boolean createTexture, boolean createDepthBuffer, boolean createDepthTexture) {
+        this.init(width,height, createTexture, createDepthBuffer, createDepthTexture);
+
+
+        this.checkFrameBufferObject();
+        this.unbind();
+    }
+
+    public FrameBuffer(int width, int height, boolean createDepthTexture) {
+        this.init(width,height,false,true,false);
+        if(createDepthTexture) {
+            this.texture = new Texture(this.createDepthTextureAttachment(width,height));
+        }
+        //GL11.glDrawBuffer(GL30.GL_DEPTH_ATTACHMENT);
+
+        this.checkFrameBufferObject();
+        this.unbind();
+    }
+
+    private void init(int width, int height, boolean createTexture, boolean createDepthBuffer, boolean createDepthTexture){
         this.frameBufferId = this.createFrameBuffer();
-        this.texture = new Texture(this.createTextureAttachment(width, height));
-        this.createDepthBufferAttachment(width, height);
+        if(createTexture){
+            this.texture = new Texture(this.createTextureAttachment(width, height));
+        }
+        if(createDepthBuffer){
+            this.createDepthBufferAttachment(width, height);
+        }
+        if(createDepthTexture){
+            this.createDepthTextureAttachment(width,height);
+        }
         this.width = width;
         this.height = height;
-        Logger.debug("FBO created - id: " + this.frameBufferId);
-        this.unbind();
     }
 
     public Texture getTexture() {
@@ -73,13 +104,14 @@ public class FrameBuffer {
     private int createDepthTextureAttachment(int width, int height) {
         int texture = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT32, width, height,
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height,
                 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (ByteBuffer) null);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT,
                 texture, 0);
         return texture;
+
     }
 
     private int createDepthBufferAttachment(int width, int height) {
@@ -90,6 +122,13 @@ public class FrameBuffer {
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT,
                 GL30.GL_RENDERBUFFER, depthBuffer);
         return depthBuffer;
+    }
+
+    private void checkFrameBufferObject(){
+        int fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(fboStatus != GL_FRAMEBUFFER_COMPLETE){
+            Logger.error("FBO-Status-Error: "+fboStatus);
+        }
     }
 
 }

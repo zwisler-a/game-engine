@@ -8,4 +8,6 @@ public class GameSettings {
     public Vector2i windowDimensions;
     public Vector3f backgroundColor;
 
+    public int resolutionX;
+    public int resolutionY;
 }

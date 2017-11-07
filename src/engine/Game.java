@@ -9,13 +9,13 @@ import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Game extends GameLoop {
 
-    private final GameSettings gameSettings;
+    public static GameSettings gameSettings;
     protected Renderer renderer;
     protected Scene currentScene;
     protected RenderOptions renderOptions;
 
     public Game(GameSettings gameSettings) {
-        this.gameSettings = gameSettings;
+        Game.gameSettings = gameSettings;
         this.renderOptions = new RenderOptions();
         this.startGameLoop();
     }

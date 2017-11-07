@@ -17,6 +17,7 @@ public class MainObject extends Game {
 
     static Entity arrow;
     public static Text text;
+    private LightSource sun;
 
     public MainObject(GameSettings gameSettings) {
         super(gameSettings);
@@ -25,14 +26,11 @@ public class MainObject extends Game {
 
     @Override
     public void load() {
-
-
         this.currentScene = new Scene();
         Dragon d = new Dragon();
         d.setPosition(new Vector3f(0, 0, 0));
         this.currentScene.add(d);
         this.currentScene.registerSimulation(d);
-
 
         arrow = new Entity();
         arrow.setRenderer(StaticRenderer.class);
@@ -57,15 +55,22 @@ public class MainObject extends Game {
         GuiElement guiElement = new GuiElement(text.getFbo().getTexture(), new Vector2f(-0.9f, 0.96f), new Vector2f(0.08f, 0.03f));
         this.currentScene.add(guiElement);
 
-        LightSource sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
+        sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
+
+        GuiElement shadowMapGui = new GuiElement(sun.getFbo().getTexture(), new Vector2f(-0.5f, -0.5f), new Vector2f(0.5f, 0.5f));
+        this.currentScene.add(shadowMapGui);
 
         LightSource ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
         this.currentScene.add(ls2);
+
+
+
     }
 
     public void tick(double deltaT) {
         super.tick(deltaT);
         this.currentScene.getCamera().checkMovementInput(deltaT);
+        sun.renderShadowMap(this.currentScene);
     }
 }

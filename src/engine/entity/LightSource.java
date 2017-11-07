@@ -1,22 +1,37 @@
 package engine.entity;
 
 
+import common.Logger;
+import engine.renderer.RenderOptions;
+import engine.renderer.ShadowRenderer;
+import engine.renderer.framebuffer.FrameBuffer;
+import engine.scene.Scene;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+
+import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 
 public class LightSource {
 
     private static int lightSource_idCounter = 0;
+    private static ShadowRenderer shadowRenderer;
 
     private Vector3f position;
     private Vector3f color;
     private float intensity = 1;
     private int lightSource_id;
+    private FrameBuffer fbo;
 
     public LightSource(Vector3f position, Vector3f color, float intensity) {
         this.position = position;
         this.color = color;
         this.intensity = intensity;
         lightSource_id = lightSource_idCounter++;
+        this.fbo = new FrameBuffer(1024,1024, true);
+        if(LightSource.shadowRenderer== null){
+            LightSource.shadowRenderer= new ShadowRenderer();
+        }
     }
 
     public LightSource(float x, float y, float z, float r, float g, float b, float intensity) {
@@ -54,4 +69,13 @@ public class LightSource {
         this.intensity = intensity;
     }
 
+    public void renderShadowMap(Scene scene){
+        this.fbo.bind();
+        LightSource.shadowRenderer.render(scene);
+        this.fbo.unbind();
+    }
+
+    public FrameBuffer getFbo() {
+        return this.fbo;
+    }
 }
