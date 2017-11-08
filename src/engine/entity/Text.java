@@ -4,6 +4,9 @@ import engine.model.FontAtlas;
 import engine.model.PlaneModel;
 import engine.model.Texture;
 import engine.renderer.framebuffer.FrameBuffer;
+import engine.renderer.framebuffer.FrameBufferBuilder;
+import engine.renderer.queued.QueuedRenderCall;
+import engine.renderer.queued.QueuedRenderer;
 import engine.shader.textShader.TextShader;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -21,13 +24,17 @@ public class Text {
     private Vector4f color;
 
     public Text(FontAtlas fontAtlas) {
-        this.fbo = new FrameBuffer(300, 50);
+        this.fbo = new FrameBufferBuilder()
+                .setDimensions(300, 300)
+                .addTexture()
+                .addDepthBuffer()
+                .create();
         this.fbo.unbind();
         if (shader == null) {
             shader = new TextShader();
         }
         this.fontAtlas = fontAtlas;
-        this.color = new Vector4f(0,0,0,1);
+        this.color = new Vector4f(0, 0, 0, 1);
     }
 
     public void setColor(Vector4f color) {
@@ -44,41 +51,44 @@ public class Text {
     }
 
     public void render() {
-        this.preferedSize = this.fontAtlas.getSize(this.text);
-        this.fbo.bind();
+        QueuedRenderer.add(() -> {
 
-        float planeScale = 1f / this.text.length();
+            this.preferedSize = this.fontAtlas.getSize(this.text);
+            this.fbo.bind();
 
-        shader.start();
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BLEND);
-        shader.loadColor(this.color);
+            float planeScale = 1f / this.text.length();
 
-        GL30.glBindVertexArray(PlaneModel.load().getVaoId());
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, PlaneModel.load().getIndicesVBO());
+            shader.start();
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glEnable(GL11.GL_BLEND);
+            shader.loadColor(this.color);
 
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fontAtlas.fontAtlasTexture.getTextureId());
+            GL30.glBindVertexArray(PlaneModel.load().getVaoId());
+            GL20.glEnableVertexAttribArray(0);
+            GL20.glEnableVertexAttribArray(1);
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, PlaneModel.load().getIndicesVBO());
 
-        for (int i = 0; i < this.text.length(); i++) {
-            shader.loadTransformationMatrix(this.createTransformationMatrix(new Vector2f(i * (planeScale * 2), 0), planeScale));
-            shader.loadCharOffset(this.fontAtlas.getCharOffset(this.text.charAt(i)));
-            GL11.glDrawElements(GL11.GL_TRIANGLES, PlaneModel.load().getIndiciesCount(), GL11.GL_UNSIGNED_INT, 0);
-        }
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fontAtlas.fontAtlasTexture.getTextureId());
+
+            for (int i = 0; i < this.text.length(); i++) {
+                shader.loadTransformationMatrix(this.createTransformationMatrix(new Vector2f(i * (planeScale * 2), 0), planeScale));
+                shader.loadCharOffset(this.fontAtlas.getCharOffset(this.text.charAt(i)));
+                GL11.glDrawElements(GL11.GL_TRIANGLES, PlaneModel.load().getIndiciesCount(), GL11.GL_UNSIGNED_INT, 0);
+            }
 
 
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
-        GL30.glBindVertexArray(0);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        shader.stop();
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(1);
+            GL30.glBindVertexArray(0);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_CULL_FACE);
+            shader.stop();
 
-        //r.render(s, new RenderOptions(true,false,false,false,false));
-        this.fbo.unbind();
+            //r.render(s, new RenderOptions(true,false,false,false,false));
+            this.fbo.unbind();
+        });
     }
 
     private Matrix4f createTransformationMatrix(Vector2f position, float planeScale) {

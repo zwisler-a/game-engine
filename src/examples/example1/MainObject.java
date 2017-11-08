@@ -28,7 +28,6 @@ public class MainObject extends Game {
     public void load() {
         this.currentScene = new Scene();
         Dragon d = new Dragon();
-        d.setPosition(new Vector3f(0, 0, 0));
         this.currentScene.add(d);
         this.currentScene.registerSimulation(d);
 
@@ -57,20 +56,19 @@ public class MainObject extends Game {
 
         sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
+        sun.enableShadow();
 
-        GuiElement shadowMapGui = new GuiElement(sun.getFbo().getTexture(), new Vector2f(-0.5f, -0.5f), new Vector2f(0.5f, 0.5f));
+        GuiElement shadowMapGui = new GuiElement(sun.getFbo().getDepthTexture(), new Vector2f(-0.5f, -0.5f), new Vector2f(0.5f, 0.5f));
         this.currentScene.add(shadowMapGui);
 
         LightSource ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
         this.currentScene.add(ls2);
-
-
 
     }
 
     public void tick(double deltaT) {
         super.tick(deltaT);
         this.currentScene.getCamera().checkMovementInput(deltaT);
-        sun.renderShadowMap(this.currentScene);
+        text.setText("FPS:" + this.fps);
     }
 }

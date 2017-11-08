@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import common.Logger;
 import common.Maths;
 import engine.entity.Camera;
 import engine.entity.Entity;
@@ -8,6 +9,8 @@ import engine.model.Model;
 import engine.model.Texture;
 import engine.model.TexturedModel;
 import engine.model.loaders.TextureLoader;
+import engine.renderer.queued.QueuedRenderCall;
+import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
 import engine.shader.waterShader.WaterShader;
 import org.joml.Matrix4f;
@@ -21,7 +24,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class WaterRenderer {
     private WaterShader shader;
     public static Camera inverted;
-    private RenderOptions waterRenderOptions;
+    private static RenderOptions waterRenderOptions;
     private Texture waterDuDvMap;
 
     public WaterRenderer(Matrix4f projectionMatrix) {
@@ -29,7 +32,7 @@ public class WaterRenderer {
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-        this.waterRenderOptions = new RenderOptions(true, true, false, false);
+        this.waterRenderOptions = new RenderOptions(true, true, false, false,false);
         this.waterDuDvMap = TextureLoader.loadTexture("res/waterDuDv.png");
     }
 
@@ -60,24 +63,26 @@ public class WaterRenderer {
     }
 
     private void renderReflection(Scene s, Renderer renderer, WaterTile waterTile) {
+        QueuedRenderer.add(() -> {
+                    waterTile.getReflectionFbo().bind();
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    Camera orginal = s.getCamera();
+                    inverted = new Camera(orginal);
+                    inverted.getPosition().y = waterTile.getPosition().y - (inverted.getPosition().y - waterTile.getPosition().y - .5f);
+                    inverted.setRotX(orginal.getRotX() * -1);
+                    s.setCamera(inverted);
+                    WaterRenderer.waterRenderOptions.clippingPlane = new Vector4f(0, 1, 0, -waterTile.getPosition().y);
+                    renderer.render(s, WaterRenderer.waterRenderOptions);
+                    s.setCamera(orginal);
+                    waterTile.getReflectionFbo().unbind();
 
-        waterTile.getReflectionFbo().bind();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Camera orginal = s.getCamera();
-        inverted = new Camera(orginal);
-        inverted.getPosition().y = waterTile.getPosition().y - (inverted.getPosition().y - waterTile.getPosition().y - .5f);
-        inverted.setRotX(orginal.getRotX() * -1);
-        s.setCamera(inverted);
-        this.waterRenderOptions.clippingPlane = new Vector4f(0, 1, 0, -waterTile.getPosition().y);
-        renderer.render(s, this.waterRenderOptions);
-        s.setCamera(orginal);
-        waterTile.getReflectionFbo().unbind();
-
-        waterTile.getRefractionFbo().bind();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        this.waterRenderOptions.clippingPlane = new Vector4f(0, -1, 0, waterTile.getPosition().y + .5f);
-        renderer.render(s, this.waterRenderOptions);
-        waterTile.getRefractionFbo().unbind();
+                    waterTile.getRefractionFbo().bind();
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    WaterRenderer.waterRenderOptions.clippingPlane = new Vector4f(0, -1, 0, waterTile.getPosition().y + .5f);
+                    renderer.render(s, WaterRenderer.waterRenderOptions);
+                    waterTile.getRefractionFbo().unbind();
+                }
+        );
     }
 
     private void prepareTexturedModel(TexturedModel model) {

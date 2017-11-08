@@ -26,6 +26,7 @@ public class Camera {
         this.rotY = rotY;
         this.rotZ = rotZ;
     }
+
     public Camera(Camera c) {
         this.position = new Vector3f(c.position);
         this.rotX = c.getRotX();
@@ -61,7 +62,6 @@ public class Camera {
         if (KeyboardHandler.isKeyDown(341)) {
             this.position.y -= this.speed * dt;
         }
-
 
 
         Vector2d deltas = MouseHandler.get();
@@ -122,6 +122,19 @@ public class Camera {
         viewMatrix.translate(negPos);
         return viewMatrix;
     }
+
+    public static Matrix4f createViewMatrix(Vector3f position, Vector3f rotation) {
+        Matrix4f viewMatrix = new Matrix4f();
+        viewMatrix.identity();
+        viewMatrix.rotate((float) Math.toRadians((double) rotation.x), new Vector3f(1.0F, 0.0F, 0.0F));
+        viewMatrix.rotate((float) Math.toRadians((double) rotation.y), new Vector3f(0.0F, 1.0F, 0.0F));
+        viewMatrix.rotate((float) Math.toRadians((double) rotation.z), new Vector3f(0.0F, 0.0F, 1.0F));
+        Vector3f pos = position;
+        Vector3f negPos = new Vector3f(-pos.x, -pos.y, -pos.z);
+        viewMatrix.translate(negPos);
+        return viewMatrix;
+    }
+
 
     public static Matrix4f createViewMatrixWithoutPosition(Camera c) {
         Matrix4f viewMatrix = new Matrix4f();

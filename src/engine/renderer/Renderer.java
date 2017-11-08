@@ -1,6 +1,10 @@
 package engine.renderer;
 
+import common.Logger;
 import engine.Game;
+import engine.GameLoop;
+import engine.GameSettings;
+import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
 import examples.example1.MainObject;
 import org.joml.Matrix4f;
@@ -8,18 +12,22 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 public class Renderer {
+    private final GameSettings gameSettings;
     public StaticRenderer staticRenderer;
     public SkyboxRenderer skyboxRenderer;
     public WaterRenderer waterRenderer;
     public GuiRenderer guiRenderer;
+    private long lastLoopTime;
 
 
-    public Renderer() {
+    public Renderer(GameSettings settings) {
         Matrix4f projectionMatrix = Renderer.createProjectionMatrix(Game.gameSettings.resolutionX, Game.gameSettings.resolutionY);
         this.staticRenderer = new StaticRenderer(projectionMatrix);
         this.skyboxRenderer = new SkyboxRenderer(projectionMatrix);
         this.waterRenderer = new WaterRenderer(projectionMatrix);
         this.guiRenderer = new GuiRenderer();
+
+        this.gameSettings = settings;
 
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -33,6 +41,11 @@ public class Renderer {
         if (scene == null) {
             throw new Error("No Scene defined!");
         }
+        if (options.queuedRenderer) {
+            do {
+                QueuedRenderer.renderOnce();
+            } while (this.getTimeLeft() > 0);
+        }
         if (options.skyboxRenderer)
             this.skyboxRenderer.render(scene.getCamera());
         if (options.staticRenderer)
@@ -41,6 +54,7 @@ public class Renderer {
             this.waterRenderer.render(scene, this);
         if (options.guiRenderer)
             this.guiRenderer.render(scene.getGuiElements());
+
 
     }
 
@@ -63,5 +77,12 @@ public class Renderer {
         projectionMatrix.m33(0);
 
         return projectionMatrix;
+    }
+
+    public long getTimeLeft() {
+        long now = System.nanoTime();
+        long updateLength = now - lastLoopTime;
+        lastLoopTime = now;
+        return updateLength - (1000000000 / gameSettings.targetFps);
     }
 }

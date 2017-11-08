@@ -5,10 +5,11 @@ import engine.model.Texture;
 import engine.model.TexturedModel;
 import engine.renderer.WaterRenderer;
 import engine.renderer.framebuffer.FrameBuffer;
+import engine.renderer.framebuffer.FrameBufferBuilder;
 import engine.scene.Scene;
 import org.joml.Vector3f;
 
-public class WaterTile extends Entity implements Simulated{
+public class WaterTile extends Entity implements Simulated {
 
     private FrameBuffer reflectionFbo;
     private FrameBuffer refractionFbo;
@@ -19,8 +20,16 @@ public class WaterTile extends Entity implements Simulated{
 
     public WaterTile(Vector3f position, float scale, Scene s) {
         this.setPosition(position);
-        this.reflectionFbo = new FrameBuffer(400, 400);
-        this.refractionFbo = new FrameBuffer(400, 400);
+        this.reflectionFbo = new FrameBufferBuilder()
+                .setDimensions(400, 400)
+                .addTexture()
+                .addDepthBuffer()
+                .create();
+        this.refractionFbo = new FrameBufferBuilder()
+                .setDimensions(400, 400)
+                .addTexture()
+                .addDepthBuffer()
+                .create();
         this.setModel(new TexturedModel(PlaneModel.load(),
                 new Texture(
                         this.reflectionFbo.getTexture().getTextureId(),

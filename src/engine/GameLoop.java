@@ -1,22 +1,20 @@
 package engine;
 
-import common.Logger;
-import examples.example1.MainObject;
-
 public abstract class GameLoop extends Thread {
     private long lastLoopTime = System.nanoTime();
-    private final int TARGET_FPS = 60;
-    private final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+    private long TARGET_FPS = 60;
+    private long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     private boolean running;
     private long lastFpsTime;
-    private long fps;
+    protected long _fps;
+    protected long fps;
 
 
     public void run() {
-        
+
         this.init();
         long timeToSleep = 0;
-        
+
         while (running) {
             // work out how long its been since the last update, this
             // will be used to calculate how far the entities should
@@ -28,14 +26,14 @@ public abstract class GameLoop extends Thread {
 
             // update the frame counter
             lastFpsTime += updateLength;
-            fps++;
+            _fps++;
 
             // update our FPS counter if a second has passed since
             // we last recorded
             if (lastFpsTime >= 1000000000) {
-                MainObject.text.setText("FPS:"+fps);
                 lastFpsTime = 0;
-                fps = 0;
+                fps = _fps;
+                _fps = 0;
             }
 
             this.tick(delta);
@@ -47,7 +45,7 @@ public abstract class GameLoop extends Thread {
             // remember this is in ms, whereas our lastLoopTime etc. vars are in ns.
             try {
                 timeToSleep = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
-                if(timeToSleep > 0){
+                if (timeToSleep > 0) {
                     Thread.sleep(timeToSleep);
                 }
             } catch (Exception e) {
@@ -71,8 +69,10 @@ public abstract class GameLoop extends Thread {
     /**
      * Starts the gameloop
      */
-    public void startGameLoop() {
+    public void startGameLoop(long targetFps) {
         this.running = true;
+        TARGET_FPS = targetFps;
+        OPTIMAL_TIME = 1000000000 / TARGET_FPS;
         this.start();
     }
 

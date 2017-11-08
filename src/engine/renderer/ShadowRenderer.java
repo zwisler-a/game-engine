@@ -31,10 +31,10 @@ public class ShadowRenderer {
         shader.stop();
     }
 
-    public void render(Scene s) {
+    public void render(Scene s, Matrix4f viewMatrix) {
 
         shader.start();
-        shader.loadViewMatrix(s.getCamera());
+        shader.loadViewMatrix(viewMatrix);
         for (TexturedModel model : s.getEntities(StaticRenderer.class).keySet()) {
             prepareTexturedModel(model);
             LinkedList<Entity> singleE = s.getEntities(StaticRenderer.class).get(model);

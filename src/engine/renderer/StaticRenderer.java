@@ -27,6 +27,7 @@ public class StaticRenderer {
     public void render(HashMap<TexturedModel, LinkedList<Entity>> entities, LinkedList<LightSource> light, Camera cam, RenderOptions renderOptions) {
         shader.start();
         shader.loadLight(light);
+        loadShadowMaps(light);
         shader.loadviewMatrix(cam);
         shader.loadClippingPlane(renderOptions.clippingPlane);
         if(entities == null){
@@ -42,6 +43,15 @@ public class StaticRenderer {
         }
         unbindTexturedModel();
         shader.stop();
+    }
+
+    private void loadShadowMaps(LinkedList<LightSource> lights) {
+        for(LightSource light:lights){
+            if(light.isShadowEnabled()){
+                GL13.glActiveTexture(GL13.GL_TEXTURE10);
+                GL11.glBindTexture(GL11.GL_TEXTURE_2D, light.getFbo().getDepthTexture().getTextureId());
+            }
+        }
     }
 
     private void prepareTexturedModel(TexturedModel model) {

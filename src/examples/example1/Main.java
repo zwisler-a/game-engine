@@ -1,25 +1,19 @@
 package examples.example1;
 
 import common.Logger;
-import engine.GameSettings;
-import org.joml.Vector2i;
-import org.joml.Vector3f;
-
+import engine.GameBuilder;
 
 public class Main {
 
     public static void main(String[] args) {
-        Logger.loggingLevel = Logger.DEBUG;
-        Logger.debug("Start ...");
 
-        GameSettings settings = new GameSettings();
-        settings.windowDimensions = new Vector2i(400, 200);
-        settings.backgroundColor = new Vector3f(0, 0, 0);
-        settings.resolutionX = 1280;
-        settings.resolutionY = 800;
-
-        new MainObject(settings);
-
+        new GameBuilder()
+                .setLoggingLevel(Logger.DEBUG)
+                .setWindowDimensions(1200,800)
+                .setResolution(1280,860)
+                .setBackgroundColor(0,0,0)
+                .setTargetFps(30)
+                .start(MainObject.class);
     }
 
 }

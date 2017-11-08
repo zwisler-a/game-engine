@@ -5,7 +5,8 @@ public class Logger {
     public static final int WARNING = 1;
     public static final int ERROR = 0;
     public static final int INFO = 2;
-    public static final int DEBUG = 3;
+    public static final int LOG = 3;
+    public static final int DEBUG = 4;
 
     public static int loggingLevel = Logger.WARNING;
 
@@ -33,4 +34,9 @@ public class Logger {
         }
     }
 
+    public static void log(String logging) {
+        if (loggingLevel >= LOG) {
+            System.out.println(logging);
+        }
+    }
 }

@@ -16,15 +16,15 @@ public abstract class Game extends GameLoop {
 
     public Game(GameSettings gameSettings) {
         Game.gameSettings = gameSettings;
-        this.renderOptions = new RenderOptions();
-        this.startGameLoop();
+        this.renderOptions = new RenderOptions(true,true,true,true,true);
+        this.startGameLoop(gameSettings.targetFps);
     }
 
     @Override
     protected void init() {
         WindowManager.createWindow(gameSettings.windowDimensions.x, gameSettings.windowDimensions.y, gameSettings.backgroundColor);
         Logger.debug("OpenGL: " + glGetString(GL_VERSION));
-        renderer = new Renderer();
+        renderer = new Renderer(gameSettings);
         this.load();
     }
 

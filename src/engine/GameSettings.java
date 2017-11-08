@@ -10,4 +10,5 @@ public class GameSettings {
 
     public int resolutionX;
     public int resolutionY;
+    public long targetFps;
 }

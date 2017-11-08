@@ -39,8 +39,8 @@ public class ShadowShader extends Shader {
         super.loadMatrix(location_projectionMatrix, matrix);
     }
 
-    public void loadViewMatrix(Camera camera) {
-        super.loadMatrix(location_viewMatrix, Camera.createViewMatrix(camera));
+    public void loadViewMatrix(Matrix4f viewMatrix) {
+        super.loadMatrix(location_viewMatrix, viewMatrix);
     }
 
 }
