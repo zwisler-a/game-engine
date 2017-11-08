@@ -18,7 +18,7 @@ public class Text {
 
     private final FontAtlas fontAtlas;
     private FrameBuffer fbo;
-    private String text;
+    private String text ="";
     private static TextShader shader;
     private float preferedSize = 1;
     private Vector4f color;
@@ -42,8 +42,10 @@ public class Text {
     }
 
     public void setText(String text) {
-        this.text = text;
-        this.render();
+        if(this.text.equals(text)){
+            this.text = text;
+            this.render();
+        }
     }
 
     public Texture getTexture() {

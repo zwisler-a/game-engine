@@ -59,7 +59,7 @@ public class MainObject extends Game {
         sun.enableShadow();
 
         GuiElement shadowMapGui = new GuiElement(sun.getFbo().getDepthTexture(), new Vector2f(-0.5f, -0.5f), new Vector2f(0.5f, 0.5f));
-        this.currentScene.add(shadowMapGui);
+        //this.currentScene.add(shadowMapGui);
 
         LightSource ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
         this.currentScene.add(ls2);

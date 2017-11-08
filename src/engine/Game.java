@@ -26,6 +26,7 @@ public abstract class Game extends GameLoop {
         Logger.debug("OpenGL: " + glGetString(GL_VERSION));
         renderer = new Renderer(gameSettings);
         this.load();
+        this.renderer.render(currentScene,this.renderOptions);
     }
 
     @Override
