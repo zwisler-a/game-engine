@@ -4,6 +4,7 @@ import common.Logger;
 import engine.renderer.RenderOptions;
 import engine.renderer.Renderer;
 import engine.scene.Scene;
+import physics.PhysicsEngine;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -11,6 +12,7 @@ public abstract class Game extends GameLoop {
 
     public static GameSettings gameSettings;
     protected Renderer renderer;
+    protected PhysicsEngine physicsEngine;
     protected Scene currentScene;
     protected RenderOptions renderOptions;
 
@@ -25,6 +27,7 @@ public abstract class Game extends GameLoop {
         WindowManager.createWindow(gameSettings.windowDimensions.x, gameSettings.windowDimensions.y, gameSettings.backgroundColor);
         Logger.debug("OpenGL: " + glGetString(GL_VERSION));
         renderer = new Renderer(gameSettings);
+        physicsEngine = new PhysicsEngine();
         this.load();
     }
 
@@ -36,6 +39,7 @@ public abstract class Game extends GameLoop {
         }
         this.renderer.render(currentScene, this.renderOptions);
         WindowManager.update();
+        this.physicsEngine.detectCollisions();
         int glErrorCode = glGetError();
         if (glErrorCode != GL_NO_ERROR) {
             Logger.error("GL Error: " + glErrorCode);

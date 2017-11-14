@@ -1,5 +1,6 @@
 package engine.scene;
 
+import common.Logger;
 import engine.entity.*;
 import engine.model.TexturedModel;
 import org.joml.Vector3f;
@@ -17,6 +18,9 @@ public class Scene {
 
 
     public void add(Entity e) {
+        if(e.getRenderer() == null){
+            Logger.warning("No renderer set for entity " + e.toString());
+        }
         HashMap<TexturedModel, LinkedList<Entity>> rendererMap;
         if (this.entities.containsKey(e.getRenderer())) {
             rendererMap = this.entities.get(e.getRenderer());

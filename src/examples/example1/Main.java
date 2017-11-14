@@ -12,7 +12,7 @@ public class Main {
                 .setWindowDimensions(1200,800)
                 .setResolution(1280,860)
                 .setBackgroundColor(0,0,0)
-                .setTargetFps(30)
+                .setTargetFps(60)
                 .start(MainObject.class);
     }
 
