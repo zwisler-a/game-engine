@@ -29,6 +29,7 @@ public abstract class Game extends GameLoop {
         renderer = new Renderer(gameSettings);
         physicsEngine = new PhysicsEngine();
         this.load();
+        this.renderer.render(currentScene,this.renderOptions);
     }
 
     @Override

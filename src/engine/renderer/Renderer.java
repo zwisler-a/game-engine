@@ -35,6 +35,7 @@ public class Renderer {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glCullFace(GL11.GL_BACK);
 
+        this.lastLoopTime = System.nanoTime();
     }
 
     public void render(Scene scene, RenderOptions options) {
@@ -44,18 +45,22 @@ public class Renderer {
         if (options.queuedRenderer) {
             do {
                 QueuedRenderer.renderOnce();
-            } while (this.getTimeLeft() > 0);
+            } while (this.getTimeLeft() > 1000);
         }
-        if (options.skyboxRenderer)
+        if (options.skyboxRenderer) {
             this.skyboxRenderer.render(scene.getCamera());
-        if (options.staticRenderer)
+        }
+        if (options.staticRenderer){
             this.staticRenderer.render(scene.getEntities(StaticRenderer.class), scene.getLightSources(), scene.getCamera(), options);
-        if (options.waterRenderer)
+        }
+        if (options.waterRenderer){
             this.waterRenderer.render(scene, this);
-        if (options.guiRenderer)
+        }
+        if (options.guiRenderer){
             this.guiRenderer.render(scene.getGuiElements());
+        }
 
-
+        lastLoopTime = System.nanoTime();
     }
 
     public static Matrix4f createProjectionMatrix(float width, float height) {
@@ -80,9 +85,7 @@ public class Renderer {
     }
 
     public long getTimeLeft() {
-        long now = System.nanoTime();
-        long updateLength = now - lastLoopTime;
-        lastLoopTime = now;
-        return updateLength - (1000000000 / gameSettings.targetFps);
+        long timePassed =  System.nanoTime() - lastLoopTime;
+        return (long)((1f / gameSettings.targetFps)*1000000) - timePassed;
     }
 }
