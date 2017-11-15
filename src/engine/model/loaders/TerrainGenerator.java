@@ -31,7 +31,7 @@ public class TerrainGenerator {
             heightMap = ImageIO.read(new File(heightmap));
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return new Terrain(null,null,null);
         }
 
         float heightmapSampleStride = (float) heightMap.getWidth() / verteciesPerSide;
