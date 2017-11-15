@@ -25,7 +25,7 @@ public class TextureLoader {
         // Check if already loaded
         Texture textureStoreTexture = TextureStore.getInstance().get(identifier);
         if (textureStoreTexture != null) {
-            Logger.debug("Retrieved texture from TextureStore.");
+            Logger.debug("Retrieved Texture: " + identifier);
             return textureStoreTexture;
         }
 

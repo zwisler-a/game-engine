@@ -21,8 +21,6 @@ public class Loader {
 
     public static Model loadToVAO(float[] vertices, int[] indices, float[] uvCoords, float[] normals) {
 
-        Logger.debug("Load model");
-
         // Create
         int vaoId = GL30.glGenVertexArrays();
         vaos.add(vaoId);
@@ -73,10 +71,7 @@ public class Loader {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        Logger.debug("Loaded!" + vaoId + " " + indices.length);
-
         return new Model(vaoId, indices.length, indicesVBO);
-
     }
 
 

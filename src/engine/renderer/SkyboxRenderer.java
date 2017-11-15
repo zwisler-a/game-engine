@@ -13,7 +13,6 @@ public class SkyboxRenderer {
 
     private SkyboxShader shader;
     private Model skybox;
-    public static Texture texture;
     public static int scale = 100;
 
     public SkyboxRenderer(Matrix4f projectionMatrix) {
@@ -22,12 +21,11 @@ public class SkyboxRenderer {
         this.shader.start();
         this.shader.loadProjectionMatrix(projectionMatrix);
         this.skybox = CubeModel.load();
-        this.texture = TextureLoader.loadTexture("res/skybox1.png");
         this.shader.stop();
         this.loadVertexBufferData();
     }
 
-    public void render(Camera c) {
+    public void render(Camera c, Texture skyboxTexture) {
         shader.start();
         shader.loadScale(this.scale);
         shader.loadViewMatrix(c);
@@ -38,7 +36,7 @@ public class SkyboxRenderer {
         GL20.glEnableVertexAttribArray(1);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.skybox.getIndicesVBO());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.texture.getTextureId());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, skyboxTexture.getTextureId());
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, this.skybox.getIndiciesCount(), GL11.GL_UNSIGNED_INT, 0);
 

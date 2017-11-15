@@ -44,7 +44,6 @@ public class Text {
     public void setText(String text) {
         if(!this.text.equals(text)){
             this.text = text;
-            Logger.debug("Render: " + text);
             this.render();
         }
     }

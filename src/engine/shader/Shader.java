@@ -23,12 +23,10 @@ public abstract class Shader {
     private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public Shader(String vertexShaderFile, String fragmentShaderFile) {
-        Logger.debug("Loading verterx shader: " + vertexShaderFile);
-        Logger.debug("Loading fragment shader: " + fragmentShaderFile);
         vertexShaderId = loadShader(vertexShaderFile, GL20.GL_VERTEX_SHADER);
         fragmentShaderId = loadShader(fragmentShaderFile, GL20.GL_FRAGMENT_SHADER);
         programId = GL20.glCreateProgram();
-        Logger.debug("Used in shader programm: " + programId);
+        Logger.debug("Loaded shader programm: " + vertexShaderFile + " | "+ fragmentShaderFile);
         GL20.glAttachShader(programId, vertexShaderId);
         GL20.glAttachShader(programId, fragmentShaderId);
         bindAttributes();

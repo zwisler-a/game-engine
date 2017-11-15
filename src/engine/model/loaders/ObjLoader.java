@@ -1,7 +1,9 @@
 package engine.model.loaders;
 
+import common.Logger.Logger;
 import engine.model.Loader;
 import engine.model.Model;
+import engine.model.store.ModelStore;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -16,6 +18,13 @@ public class ObjLoader {
 
     public static Model loadObjFile(String file) {
         try {
+
+            // Check if model is already loaded
+            Model modelStoreModel = ModelStore.getInstance().get(file);
+            if (modelStoreModel != null) {
+                Logger.debug("Retrieved model: " + file);
+                return modelStoreModel;
+            }
 
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -88,7 +97,11 @@ public class ObjLoader {
                 indicesArray[i] = indices.get(i);
             }
             br.close();
-            return Loader.loadToVAO(verticesArray, indicesArray, textureArray, normalsArray);
+
+            Model model = Loader.loadToVAO(verticesArray, indicesArray, textureArray, normalsArray);
+            ModelStore.getInstance().add(file, model);
+            Logger.debug("Loaded Model: " + file);
+            return model;
 
         } catch (Exception e) {
             e.printStackTrace();

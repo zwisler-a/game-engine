@@ -36,6 +36,7 @@ public class MainObject extends Game {
     @Override
     public void load() {
         this.currentScene = new Scene();
+
         Dragon d = new Dragon();
         //this.currentScene.add(d);
         this.currentScene.registerSimulation(d);
@@ -73,7 +74,6 @@ public class MainObject extends Game {
         this.currentScene.add(guiElement3);
 
 
-
         sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
         sun.enableShadow();
@@ -92,11 +92,11 @@ public class MainObject extends Game {
         Texture cubeTexture = TextureLoader.loadTexture("res/cubeTextur.png");
         cubi = new TexturedModel(cubeModel, cubeTexture);
 
-        cube1 = new PhysCube(1,false);
+        cube1 = new PhysCube(1, false);
         this.physicsEngine.addEntity(cube1);
         this.currentScene.add(cube1);
 
-        cube2 = new PhysCube(-1,true);
+        cube2 = new PhysCube(-1, true);
         this.physicsEngine.addEntity(cube2);
         this.currentScene.add(cube2);
 
@@ -138,7 +138,7 @@ public class MainObject extends Game {
 
     class PhysCube extends PhysicsEntity {
 
-        public PhysCube(int gravDir,boolean data2) {
+        public PhysCube(int gravDir, boolean data2) {
             super(new Vector3f(-1f, 1f, -1f), new Vector3f(2, -2, 2));
             this.setRenderer(StaticRenderer.class);
             this.setModel(cubi);

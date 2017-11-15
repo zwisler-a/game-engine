@@ -45,15 +45,15 @@ public class Renderer {
             } while (this.getTimeLeft() > 1000);
         }
         if (options.skyboxRenderer) {
-            this.skyboxRenderer.render(scene.getCamera());
+            this.skyboxRenderer.render(scene.getCamera(), scene.getSkyboxTexture());
         }
-        if (options.staticRenderer){
+        if (options.staticRenderer) {
             this.staticRenderer.render(scene.getEntities(StaticRenderer.class), scene.getLightSources(), scene.getCamera(), options);
         }
-        if (options.waterRenderer){
+        if (options.waterRenderer) {
             this.waterRenderer.render(scene, this);
         }
-        if (options.guiRenderer){
+        if (options.guiRenderer) {
             this.guiRenderer.render(scene.getGuiElements());
         }
 
@@ -82,7 +82,7 @@ public class Renderer {
     }
 
     public long getTimeLeft() {
-        long timePassed =  System.nanoTime() - lastLoopTime;
-        return (long)((1f / gameSettings.targetFps)*1000000) - timePassed;
+        long timePassed = System.nanoTime() - lastLoopTime;
+        return (long) ((1f / gameSettings.targetFps) * 1000000) - timePassed;
     }
 }

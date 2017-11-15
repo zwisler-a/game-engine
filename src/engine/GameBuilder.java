@@ -21,6 +21,7 @@ public class GameBuilder {
         Logger.log("Resolution: \t\t\t" + this.settings.resolutionX + "x" + this.settings.resolutionY);
         Logger.log("Target-FPS: \t\t\t" + this.settings.targetFps);
         Logger.log("Background-Color: \t\t\t" + this.settings.backgroundColor.toString());
+        Logger.log("\n\n");
         try {
             game.getConstructor(GameSettings.class).newInstance(settings);
         } catch (InstantiationException e) {

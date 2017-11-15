@@ -2,7 +2,9 @@ package engine.scene;
 
 import common.Logger.Logger;
 import engine.entity.*;
+import engine.model.Texture;
 import engine.model.TexturedModel;
+import engine.model.loaders.TextureLoader;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -15,6 +17,15 @@ public class Scene {
     private LinkedList<LightSource> lightSources = new LinkedList<>();
     private LinkedList<Simulated> simulatedEntities = new LinkedList<>();
     private LinkedList<GuiElement> guiElements = new LinkedList<>();
+    private Texture skyboxTexture;
+
+    public Scene(){
+        this.skyboxTexture = TextureLoader.loadTexture("res/skybox1.png");
+    }
+
+    public Scene(Texture skyboxTexture) {
+        this.skyboxTexture = skyboxTexture;
+    }
 
 
     public void add(Entity e) {
@@ -78,5 +89,9 @@ public class Scene {
 
     public void add(GuiElement guiElement) {
         this.guiElements.add(guiElement);
+    }
+
+    public Texture getSkyboxTexture() {
+        return skyboxTexture;
     }
 }

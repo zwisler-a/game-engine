@@ -6,6 +6,8 @@ import engine.renderer.Renderer;
 import engine.scene.Scene;
 import physics.PhysicsEngine;
 
+import java.util.Date;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Game extends GameLoop {
@@ -53,6 +55,7 @@ public abstract class Game extends GameLoop {
         // Check if its still supposed to run
         if (WindowManager.shouldClose()) {
             this.stopGameLoop();
+            Logger.outputLogToFile("logs/" + new Date().getTime() + ".log");
         }
     }
 
