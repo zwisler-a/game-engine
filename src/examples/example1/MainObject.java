@@ -10,10 +10,12 @@ import engine.model.loaders.FontLoader;
 import engine.model.loaders.ObjLoader;
 import engine.model.loaders.TerrainGenerator;
 import engine.model.loaders.TextureLoader;
+import engine.model.store.TexturedModelStore;
 import engine.renderer.StaticRenderer;
 import engine.scene.Scene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import physics.PhysicsEngine;
 import physics.PhysicsEntity;
 
 public class MainObject extends Game {
@@ -36,19 +38,6 @@ public class MainObject extends Game {
     @Override
     public void load() {
         this.currentScene = new Scene();
-
-        Dragon d = new Dragon();
-        //this.currentScene.add(d);
-        this.currentScene.registerSimulation(d);
-
-        arrow = new Entity();
-        arrow.setRenderer(StaticRenderer.class);
-        arrow.setModel(new TexturedModel(
-                ObjLoader.loadObjFile("res/arrow.obj"),
-                TextureLoader.loadTexture("res/cubeTextur.png")
-        ));
-        arrow.setPosition(new Vector3f(0, 0, 20));
-        //this.currentScene.add(arrow);
 
         Terrain t = TerrainGenerator.generate(
                 "res/heightmap.png", 500, 500, 50,
@@ -76,10 +65,6 @@ public class MainObject extends Game {
 
         sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
-        sun.enableShadow();
-
-        GuiElement shadowMapGui = new GuiElement(sun.getFbo().getDepthTexture(), new Vector2f(-0.5f, -0.5f), new Vector2f(0.5f, 0.5f));
-        //this.currentScene.add(shadowMapGui);
 
         LightSource ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
         this.currentScene.add(ls2);
@@ -90,14 +75,12 @@ public class MainObject extends Game {
 
         Model cubeModel = ObjLoader.loadObjFile("res/cube.obj");
         Texture cubeTexture = TextureLoader.loadTexture("res/cubeTextur.png");
-        cubi = new TexturedModel(cubeModel, cubeTexture);
+        TexturedModelStore.getInstance().add("test-cube", new TexturedModel(cubeModel, cubeTexture));
 
-        cube1 = new PhysCube(1, false);
-        this.physicsEngine.addEntity(cube1);
+        cube1 = new TestCube(this.physicsEngine);
         this.currentScene.add(cube1);
 
-        cube2 = new PhysCube(-1, true);
-        this.physicsEngine.addEntity(cube2);
+        cube2 = new TestCube(this.physicsEngine);
         this.currentScene.add(cube2);
 
 
@@ -123,12 +106,12 @@ public class MainObject extends Game {
         if (KeyboardHandler.isKeyDown(79)) {
             cube1.setPosition(new Vector3f(20, 50, 0));
             cube1.setVelocity(new Vector3f(0));
-            cube2.setPosition(new Vector3f(20, -50, 0));
+            cube2.setPosition(new Vector3f(25, 50, 0));
             cube2.setVelocity(new Vector3f(0));
         }
         if (KeyboardHandler.isKeyDown(80)) {
             cube1.setVelocity(new Vector3f(0, 0.1f, 0));
-            cube2.setVelocity(new Vector3f(0, -0.1f, 0));
+            cube2.setVelocity(new Vector3f(0, 0.1f, 0));
         }
 
         text.setText("FPS:" + this.fps);
@@ -136,12 +119,17 @@ public class MainObject extends Game {
         text3.setText("PD2: " + Global.data2);
     }
 
-    class PhysCube extends PhysicsEntity {
+    class TestCube extends PhysicsEntity {
 
-        public PhysCube(int gravDir, boolean data2) {
+        public TestCube(PhysicsEngine physicsEngine) {
             super(new Vector3f(-1f, 1f, -1f), new Vector3f(2, -2, 2));
+            TexturedModel tm = TexturedModelStore.getInstance().get("test-cube");
+            if (tm == null) {
+                throw new Error("Textured Model test-cube not loaded!");
+            }
             this.setRenderer(StaticRenderer.class);
-            this.setModel(cubi);
+            this.setModel(tm);
+            physicsEngine.addEntity(this);
             this.setPosition(new Vector3f(20, -10, 0));
         }
     }
