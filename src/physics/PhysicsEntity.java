@@ -2,6 +2,7 @@ package physics;
 
 import engine.entity.Entity;
 import engine.entity.Simulated;
+import examples.example1.MainObject;
 import org.joml.Vector3f;
 
 public class PhysicsEntity extends Entity implements Simulated {
@@ -13,10 +14,12 @@ public class PhysicsEntity extends Entity implements Simulated {
 
     private boolean isStatic = false;
 
-    private static float GRAVITY = -0.1f;
+    protected float GRAVITY = -0.1f;
 
     private Vector3f hitboxOffset;
     private Vector3f hitboxSize;
+
+    public boolean data2 = false;
 
     public PhysicsEntity(Vector3f hitboxOffset, Vector3f hitboxSize) {
         this.hitboxOffset = hitboxOffset;
@@ -74,8 +77,8 @@ public class PhysicsEntity extends Entity implements Simulated {
         this.velocity.y += GRAVITY * dt * 0.05f;
 
         if (this.getPosition().y < 0) {
-            this.getPosition().y = 20;
-            this.velocity = new Vector3f(0);
+            //this.getPosition().y = 20;
+            //this.velocity = new Vector3f(0);
         }
 
     }

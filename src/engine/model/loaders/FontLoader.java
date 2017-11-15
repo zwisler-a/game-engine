@@ -31,7 +31,7 @@ public class FontLoader {
         FontMetrics metrics = getFontMetrics(font, false);
         int imageWidth = 0;
         int[] charPosition = new int[256];
-        for (int i = 48; i < 90; i++) {
+        for (int i = 46; i < 256; i++) {
             if (i == 127) {
                 continue;
             }
@@ -41,7 +41,7 @@ public class FontLoader {
         BufferedImage fontAtlas = new BufferedImage(imageWidth, metrics.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = fontAtlas.createGraphics();
         g.setFont(font);
-        for (int i = 48; i < 90; i++) {
+        for (int i = 46; i < 256; i++) {
             if (i == 127) {
                 continue;
             }

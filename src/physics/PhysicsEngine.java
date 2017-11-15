@@ -1,5 +1,7 @@
 package physics;
 
+import common.Logger;
+import engine.Global;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -25,7 +27,7 @@ public class PhysicsEngine {
                 if (intersect(
                         p1, entity.getHitboxSize(),
                         p2, controlEntity.getHitboxSize()
-                )) {
+                ) || true) {
                     if (!collisionPairs.containsKey(entity)) {
                         collisionPairs.put(controlEntity, entity);
                     }
@@ -51,25 +53,34 @@ public class PhysicsEngine {
     }
 
     private void calculateVelocities(PhysicsEntity e1, PhysicsEntity e2) {
-        Vector3f p1 = new Vector3f(e1.getPosition()).add(e1.getHitboxSize());
+        Vector3f p1 = new Vector3f(e1.getPosition()).add(e1.getHitboxOffset());
         Vector3f p2 = new Vector3f(p1).add(e1.getHitboxSize());
-        Vector3f p3 = new Vector3f(e2.getPosition()).add(e2.getHitboxSize());
+        Vector3f p3 = new Vector3f(e2.getPosition()).add(e1.getHitboxOffset());
         Vector3f p4 = new Vector3f(p3).add(e2.getHitboxSize());
 
-        Vector3f r1 = new Vector3f();
-        Vector3f r2 = new Vector3f();
-
         // y diff
-        float dy = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y)) - e2.getHitboxSize().y;
+        float dy = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
 
-        if (dy < 0) {
+        if(dy < 0f){
             return;
         }
+        if (e1.getVelocity().y < e2.getVelocity().y) {
+            dy *= -1;
 
-        Vector3f idk = new Vector3f(r1).sub(r2);
-        e2.getVelocity().y += dy * e1.getBouncyness();
-
-        e2.getPosition().y += dy;
+        }
+        if(!e2.data2){
+            Global.data = Float.toString(dy);
+        } else {
+            Global.data2 = Float.toString(dy);
+        }
+        if(!e2.isStatic()){
+            e2.getVelocity().y = dy * e1.getBouncyness();
+            e2.getPosition().y += dy;
+        }
+        if(!e1.isStatic()){
+            e1.getVelocity().y = dy * e2.getBouncyness();
+            e1.getPosition().y -= dy;
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package engine.entity;
 
+import common.Logger;
 import engine.model.FontAtlas;
 import engine.model.PlaneModel;
 import engine.model.Texture;
@@ -18,7 +19,7 @@ public class Text {
 
     private final FontAtlas fontAtlas;
     private FrameBuffer fbo;
-    private String text ="";
+    private String text = "";
     private static TextShader shader;
     private float preferedSize = 1;
     private Vector4f color;
@@ -42,8 +43,9 @@ public class Text {
     }
 
     public void setText(String text) {
-        if(this.text.equals(text)){
+        if(!this.text.equals(text)){
             this.text = text;
+            Logger.debug("Render: " + text);
             this.render();
         }
     }
@@ -54,7 +56,6 @@ public class Text {
 
     public void render() {
         QueuedRenderer.add(() -> {
-
             this.preferedSize = this.fontAtlas.getSize(this.text);
             this.fbo.bind();
 
@@ -87,8 +88,6 @@ public class Text {
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glEnable(GL11.GL_CULL_FACE);
             shader.stop();
-
-            //r.render(s, new RenderOptions(true,false,false,false,false));
             this.fbo.unbind();
         });
     }
