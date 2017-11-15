@@ -12,9 +12,9 @@ public class FontAtlas {
     private int textureWidth;
     public int[] charPosition;
 
-    public FontAtlas(BufferedImage fontAtlas, int[] charPosition, FontMetrics metrics) {
+    public FontAtlas(BufferedImage fontAtlas, String fontName, int[] charPosition, FontMetrics metrics) {
         textureWidth = fontAtlas.getWidth();
-        this.fontAtlasTexture = TextureLoader.loadTexture(fontAtlas);
+        this.fontAtlasTexture = TextureLoader.loadTexture(fontName, fontAtlas);
         this.charPosition = charPosition;
         this.metrics = metrics;
     }

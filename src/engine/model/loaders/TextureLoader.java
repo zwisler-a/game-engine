@@ -1,6 +1,8 @@
 package engine.model.loaders;
 
+import common.Logger.Logger;
 import engine.model.Texture;
+import engine.model.store.TextureStore;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;
@@ -15,11 +17,17 @@ public class TextureLoader {
     private static final int BYTES_PER_PIXEL = 4;//3 for RGB, 4 for RGBA
 
     public static Texture loadTexture(String path) {
-        return loadTexture(TextureLoader.loadImage(path));
+        return loadTexture(path, TextureLoader.loadImage(path));
     }
 
-    public static Texture loadTexture(BufferedImage image) {
+    public static Texture loadTexture(String identifier, BufferedImage image) {
 
+        // Check if already loaded
+        Texture textureStoreTexture = TextureStore.getInstance().get(identifier);
+        if (textureStoreTexture != null) {
+            Logger.debug("Retrieved texture from TextureStore.");
+            return textureStoreTexture;
+        }
 
         int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
@@ -56,8 +64,14 @@ public class TextureLoader {
         //Send texel data to OpenGL
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
+        Texture texture = new Texture(textureID);
+
+        // Register in TextureStore
+        TextureStore.getInstance().add(identifier, texture);
+        Logger.debug("Loaded Texture: " + identifier);
+
         //Return the texture ID so we can bind it later again
-        return new Texture(textureID);
+        return texture;
     }
 
     public static BufferedImage loadImage(String loc) {

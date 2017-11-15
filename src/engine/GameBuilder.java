@@ -1,6 +1,6 @@
 package engine;
 
-import common.Logger;
+import common.Logger.Logger;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 

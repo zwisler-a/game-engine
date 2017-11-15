@@ -1,6 +1,6 @@
 package engine.scene;
 
-import common.Logger;
+import common.Logger.Logger;
 import engine.entity.*;
 import engine.model.TexturedModel;
 import org.joml.Vector3f;

@@ -1,6 +1,6 @@
 package engine;
 
-import common.Logger;
+import common.Logger.Logger;
 import engine.renderer.RenderOptions;
 import engine.renderer.Renderer;
 import engine.scene.Scene;
@@ -18,7 +18,7 @@ public abstract class Game extends GameLoop {
 
     public Game(GameSettings gameSettings) {
         Game.gameSettings = gameSettings;
-        this.renderOptions = new RenderOptions(true,true,true,true,true);
+        this.renderOptions = new RenderOptions(true, true, true, true, true);
         this.startGameLoop(gameSettings.targetFps);
     }
 
@@ -29,23 +29,29 @@ public abstract class Game extends GameLoop {
         renderer = new Renderer(gameSettings);
         physicsEngine = new PhysicsEngine();
         this.load();
-        this.renderer.render(currentScene,this.renderOptions);
     }
 
     @Override
     public void tick(double deltaT) {
+        // ------ Main Game Loop -------
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (this.currentScene != null) {
             this.currentScene.tick(deltaT);
         }
         this.renderer.render(currentScene, this.renderOptions);
         WindowManager.update();
-        this.physicsEngine.detectCollisions();
+        this.physicsEngine.tick(deltaT);
+        // ------ Main Game Loop -------
+
+
+        // Check openGl errors
         int glErrorCode = glGetError();
         if (glErrorCode != GL_NO_ERROR) {
             Logger.error("GL Error: " + glErrorCode);
         }
-        if(WindowManager.shouldClose()){
+
+        // Check if its still supposed to run
+        if (WindowManager.shouldClose()) {
             this.stopGameLoop();
         }
     }

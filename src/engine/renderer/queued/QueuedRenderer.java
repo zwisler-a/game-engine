@@ -1,11 +1,7 @@
 package engine.renderer.queued;
 
-import common.Logger;
-import engine.renderer.Renderer;
-
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.Stack;
 
 public class QueuedRenderer {
     private static Queue<QueuedRenderCall> renderCalls = new ArrayDeque<>();

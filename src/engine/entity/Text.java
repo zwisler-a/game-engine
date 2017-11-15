@@ -1,12 +1,11 @@
 package engine.entity;
 
-import common.Logger;
+import common.Logger.Logger;
 import engine.model.FontAtlas;
 import engine.model.PlaneModel;
 import engine.model.Texture;
 import engine.renderer.framebuffer.FrameBuffer;
 import engine.renderer.framebuffer.FrameBufferBuilder;
-import engine.renderer.queued.QueuedRenderCall;
 import engine.renderer.queued.QueuedRenderer;
 import engine.shader.textShader.TextShader;
 import org.joml.Matrix4f;

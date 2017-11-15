@@ -1,17 +1,11 @@
 package engine.entity;
 
 
-import common.Logger;
-import engine.renderer.RenderOptions;
 import engine.renderer.ShadowRenderer;
 import engine.renderer.framebuffer.FrameBuffer;
 import engine.renderer.framebuffer.FrameBufferBuilder;
 import engine.scene.Scene;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-
-import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 
 public class LightSource {
 

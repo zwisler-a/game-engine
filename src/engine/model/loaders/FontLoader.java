@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import common.Logger;
 import engine.model.FontAtlas;
 
 public class FontLoader {
@@ -45,12 +44,12 @@ public class FontLoader {
             if (i == 127) {
                 continue;
             }
-            g.drawString(String.valueOf((char)i), charPosition[i], metrics.getAscent());
+            g.drawString(String.valueOf((char) i), charPosition[i], metrics.getAscent());
         }
         g.setColor(Color.RED);
         g.dispose();
 
-        return new FontAtlas(fontAtlas, charPosition, metrics);
+        return new FontAtlas(fontAtlas, font.getFontName(), charPosition, metrics);
     }
 
     private static FontMetrics getFontMetrics(Font font, boolean antiAlias) {
@@ -64,7 +63,6 @@ public class FontLoader {
         g.dispose();
         return metrics;
     }
-
 
 
 }

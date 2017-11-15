@@ -1,7 +1,5 @@
 package engine;
 
-import common.Logger;
-
 public abstract class GameLoop extends Thread {
     private long lastLoopTime = System.nanoTime();
     private long TARGET_FPS = 60;

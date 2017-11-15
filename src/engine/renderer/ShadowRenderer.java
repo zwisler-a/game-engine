@@ -1,25 +1,16 @@
 package engine.renderer;
 
-import common.Logger;
 import common.Maths;
 import engine.Game;
-import engine.entity.Camera;
 import engine.entity.Entity;
-import engine.entity.WaterTile;
 import engine.model.Model;
-import engine.model.Texture;
 import engine.model.TexturedModel;
-import engine.model.loaders.TextureLoader;
 import engine.scene.Scene;
 import engine.shader.shadowShader.ShadowShader;
-import engine.shader.waterShader.WaterShader;
 import org.joml.Matrix4f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.*;
 
 import java.util.LinkedList;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public class ShadowRenderer {
     private ShadowShader shader;

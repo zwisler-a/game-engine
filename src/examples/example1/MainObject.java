@@ -1,6 +1,5 @@
 package examples.example1;
 
-import common.Logger;
 import engine.Game;
 import engine.GameSettings;
 import engine.Global;
@@ -94,12 +93,10 @@ public class MainObject extends Game {
         cubi = new TexturedModel(cubeModel, cubeTexture);
 
         cube1 = new PhysCube(1,false);
-        this.currentScene.registerSimulation(cube1);
         this.physicsEngine.addEntity(cube1);
         this.currentScene.add(cube1);
 
         cube2 = new PhysCube(-1,true);
-        this.currentScene.registerSimulation(cube2);
         this.physicsEngine.addEntity(cube2);
         this.currentScene.add(cube2);
 
@@ -112,12 +109,10 @@ public class MainObject extends Game {
         ));
         plane.setStatic(true);
         plane.setScale(5);
-        plane.setBouncyness(0);
+        plane.setElasticity(0);
         plane.setPosition(new Vector3f(20, 10, 0));
-        this.currentScene.registerSimulation(plane);
         this.physicsEngine.addEntity(plane);
         this.currentScene.add(plane);
-
 
     }
 
@@ -148,7 +143,6 @@ public class MainObject extends Game {
             this.setRenderer(StaticRenderer.class);
             this.setModel(cubi);
             this.setPosition(new Vector3f(20, -10, 0));
-            this.GRAVITY = this.GRAVITY * gravDir;
         }
     }
 

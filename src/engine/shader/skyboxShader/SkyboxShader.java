@@ -1,6 +1,5 @@
 package engine.shader.skyboxShader;
 
-import common.Logger;
 import common.Maths;
 import engine.entity.Camera;
 import engine.shader.Shader;

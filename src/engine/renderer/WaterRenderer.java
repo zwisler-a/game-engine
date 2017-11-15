@@ -1,6 +1,5 @@
 package engine.renderer;
 
-import common.Logger;
 import common.Maths;
 import engine.entity.Camera;
 import engine.entity.Entity;
@@ -9,7 +8,6 @@ import engine.model.Model;
 import engine.model.Texture;
 import engine.model.TexturedModel;
 import engine.model.loaders.TextureLoader;
-import engine.renderer.queued.QueuedRenderCall;
 import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
 import engine.shader.waterShader.WaterShader;

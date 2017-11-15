@@ -1,6 +1,6 @@
 package engine.renderer.framebuffer;
 
-import common.Logger;
+import common.Logger.Logger;
 import engine.model.Texture;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;

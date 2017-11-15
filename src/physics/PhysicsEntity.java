@@ -1,29 +1,19 @@
 package physics;
 
 import engine.entity.Entity;
-import engine.entity.Simulated;
-import examples.example1.MainObject;
 import org.joml.Vector3f;
 
-public class PhysicsEntity extends Entity implements Simulated {
+public class PhysicsEntity extends Entity {
 
+    private HitBox hitBox;
     private Vector3f velocity;
     private Vector3f rotationalVelocity;
     private float mass = 1;
-    private float bouncyness = 2;
-
+    private float elasticity = 1;
     private boolean isStatic = false;
 
-    protected float GRAVITY = -0.1f;
-
-    private Vector3f hitboxOffset;
-    private Vector3f hitboxSize;
-
-    public boolean data2 = false;
-
     public PhysicsEntity(Vector3f hitboxOffset, Vector3f hitboxSize) {
-        this.hitboxOffset = hitboxOffset;
-        this.hitboxSize = hitboxSize;
+        this.hitBox = new HitBox(hitboxOffset,hitboxSize);
         this.velocity = new Vector3f();
         this.rotationalVelocity = new Vector3f(0);
     }
@@ -52,37 +42,6 @@ public class PhysicsEntity extends Entity implements Simulated {
         this.mass = mass;
     }
 
-    public float getBouncyness() {
-        return bouncyness;
-    }
-
-    public void setBouncyness(float bouncyness) {
-        this.bouncyness = bouncyness;
-    }
-
-    @Override
-    public void simulate(double dt) {
-        if (this.isStatic) {
-            return;
-        }
-        this.getPosition().x += this.velocity.x * dt;
-        this.getPosition().y += this.velocity.y * dt;
-        this.getPosition().z += this.velocity.z * dt;
-
-        this.getRotation().x += this.rotationalVelocity.x * dt;
-        this.getRotation().y += this.rotationalVelocity.y * dt;
-        this.getRotation().z += this.rotationalVelocity.z * dt;
-
-
-        this.velocity.y += GRAVITY * dt * 0.05f;
-
-        if (this.getPosition().y < 0) {
-            //this.getPosition().y = 20;
-            //this.velocity = new Vector3f(0);
-        }
-
-    }
-
     public boolean isStatic() {
         return isStatic;
     }
@@ -91,11 +50,19 @@ public class PhysicsEntity extends Entity implements Simulated {
         isStatic = aStatic;
     }
 
-    public Vector3f getHitboxOffset() {
-        return hitboxOffset;
+    public float getElasticity() {
+        return elasticity;
     }
 
-    public Vector3f getHitboxSize() {
-        return hitboxSize;
+    public void setElasticity(float elasticity) {
+        this.elasticity = elasticity;
+    }
+
+    public HitBox getHitBox() {
+        return hitBox;
+    }
+
+    public void setHitBox(HitBox hitBox) {
+        this.hitBox = hitBox;
     }
 }

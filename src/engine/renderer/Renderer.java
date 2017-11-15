@@ -1,12 +1,9 @@
 package engine.renderer;
 
-import common.Logger;
 import engine.Game;
-import engine.GameLoop;
 import engine.GameSettings;
 import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
-import examples.example1.MainObject;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
