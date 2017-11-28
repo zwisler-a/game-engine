@@ -27,14 +27,13 @@ public abstract class Game extends GameLoop {
     @Override
     protected void init() {
         WindowManager.createWindow(gameSettings.windowDimensions.x, gameSettings.windowDimensions.y, gameSettings.backgroundColor);
-        Logger.debug("OpenGL: " + glGetString(GL_VERSION));
         renderer = new Renderer(gameSettings);
         physicsEngine = new PhysicsEngine();
         this.load();
     }
 
     @Override
-    public void tick(double deltaT) {
+    public void tick(double deltaT) throws Exception{
         // ------ Main Game Loop -------
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (this.currentScene != null) {
@@ -55,7 +54,6 @@ public abstract class Game extends GameLoop {
         // Check if its still supposed to run
         if (WindowManager.shouldClose()) {
             this.stopGameLoop();
-            Logger.outputLogToFile("logs/" + new Date().getTime() + ".log");
         }
     }
 

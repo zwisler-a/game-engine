@@ -5,6 +5,7 @@ import sun.misc.Queue;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 import static common.Logger.LoggingLevel.*;
@@ -85,9 +86,19 @@ public class Logger {
         return trace.getLineNumber();
     }
 
-    public static boolean outputLogToFile(String path) {
+    public static boolean outputLogToFile(Exception exception) {
+        return outputLogToFile("log/" + new Date().getTime() + ".log", exception);
+    }
+
+    public static boolean outputLogToFile() {
+        return outputLogToFile("log/" + new Date().getTime() + ".log", null);
+    }
+
+
+    public static boolean outputLogToFile(String path, Exception exception) {
         File file = new File(path);
         try {
+            file.getParentFile().mkdirs();
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,6 +109,9 @@ public class Logger {
             PrintWriter printWriter = new PrintWriter(file);
             for (Log l : log) {
                 printWriter.print("[" + dateFormat.format(l.getTime()) + " - " + l.getCallee() + "]: \t\t\t" + l.getLog() + "\n");
+            }
+            if (exception != null) {
+                exception.printStackTrace(printWriter);
             }
             printWriter.flush();
             printWriter.close();

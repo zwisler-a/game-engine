@@ -1,5 +1,6 @@
 package examples.example1;
 
+import common.Logger.Logger;
 import engine.Game;
 import engine.GameSettings;
 import engine.Global;
@@ -15,8 +16,13 @@ import engine.renderer.StaticRenderer;
 import engine.scene.Scene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import physics.PhysicsEngine;
 import physics.PhysicsEntity;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_I;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_O;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_P;
 
 public class MainObject extends Game {
 
@@ -44,6 +50,16 @@ public class MainObject extends Game {
                 TextureLoader.loadTexture("res/terrainTexture.png"));
         t.setPosition(new Vector3f(-250, -50, -250));
         this.currentScene.add(t);
+
+        TexturedModel aliceModel = new TexturedModel(
+                ObjLoader.loadObjFile("res/aliceV1.obj"),
+                TextureLoader.loadTexture("res/aliceV1.png")
+        );
+        Entity e = new Entity();
+        e.setRenderer(StaticRenderer.class);
+        e.setModel(aliceModel);
+        e.setPosition(new Vector3f(0,0,0));
+        this.currentScene.add(e);
 
         WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
         this.currentScene.add(water);
@@ -92,26 +108,32 @@ public class MainObject extends Game {
         ));
         plane.setStatic(true);
         plane.setScale(5);
-        plane.setElasticity(0);
+        plane.setElasticity(1);
         plane.setPosition(new Vector3f(20, 10, 0));
         this.physicsEngine.addEntity(plane);
         this.currentScene.add(plane);
 
     }
 
-    public void tick(double deltaT) {
+    public void tick(double deltaT) throws Exception{
         super.tick(deltaT);
         this.currentScene.getCamera().checkMovementInput(deltaT);
 
-        if (KeyboardHandler.isKeyDown(79)) {
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_O)) {
             cube1.setPosition(new Vector3f(20, 50, 0));
             cube1.setVelocity(new Vector3f(0));
             cube2.setPosition(new Vector3f(25, 50, 0));
             cube2.setVelocity(new Vector3f(0));
         }
-        if (KeyboardHandler.isKeyDown(80)) {
-            cube1.setVelocity(new Vector3f(0, 0.1f, 0));
-            cube2.setVelocity(new Vector3f(0, 0.1f, 0));
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_I)) {
+            cube1.setPosition(new Vector3f(20, -50, 0));
+            cube1.setVelocity(new Vector3f(0));
+            cube2.setPosition(new Vector3f(25, -50, 0));
+            cube2.setVelocity(new Vector3f(0));
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_P)) {
+            cube1.setVelocity(new Vector3f(0, 0.5f, 0));
+            cube2.setVelocity(new Vector3f(0, 0.5f, 0));
         }
 
         text.setText("FPS:" + this.fps);

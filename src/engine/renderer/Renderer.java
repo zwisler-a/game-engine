@@ -1,12 +1,19 @@
 package engine.renderer;
 
+import common.Logger.Logger;
 import engine.Game;
 import engine.GameSettings;
+import engine.WindowManager;
+import engine.entity.GuiElement;
+import engine.model.loaders.TextureLoader;
 import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+
+import java.util.LinkedList;
 
 public class Renderer {
     private final GameSettings gameSettings;
@@ -18,21 +25,35 @@ public class Renderer {
 
 
     public Renderer(GameSettings settings) {
-        Matrix4f projectionMatrix = Renderer.createProjectionMatrix(Game.gameSettings.resolutionX, Game.gameSettings.resolutionY);
-        this.staticRenderer = new StaticRenderer(projectionMatrix);
-        this.skyboxRenderer = new SkyboxRenderer(projectionMatrix);
-        this.waterRenderer = new WaterRenderer(projectionMatrix);
         this.guiRenderer = new GuiRenderer();
-
-        this.gameSettings = settings;
-
+        this.renderOneImageScreen();
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glCullFace(GL11.GL_BACK);
 
+        Matrix4f projectionMatrix = Renderer.createProjectionMatrix(Game.gameSettings.resolutionX, Game.gameSettings.resolutionY);
+        this.staticRenderer = new StaticRenderer(projectionMatrix);
+        this.skyboxRenderer = new SkyboxRenderer(projectionMatrix);
+        this.waterRenderer = new WaterRenderer(projectionMatrix);
+
+        this.gameSettings = settings;
+
+
+
         this.lastLoopTime = System.nanoTime();
+    }
+
+    private void renderOneImageScreen() {
+        GuiElement guiElement = new GuiElement(
+                TextureLoader.loadTexture("res/splashscreen.jpg"),
+                new Vector2f(0f, 0f),
+                new Vector2f(1, 1), true);
+        LinkedList<GuiElement> guiElements = new LinkedList<>();
+        guiElements.add(guiElement);
+        this.guiRenderer.render(guiElements);
+        WindowManager.update();
     }
 
     public void render(Scene scene, RenderOptions options) {

@@ -36,9 +36,6 @@ public class PhysicsEngine {
         }
     }
 
-    private void resolveCollisionPairs(double dt) {
-
-    }
 
     private void detectCollisions(PhysicsEntity entity) {
         Vector3f p1 = new Vector3f(entity.getPosition()).add(entity.getHitBox().getOffset());
@@ -57,23 +54,18 @@ public class PhysicsEngine {
             }
 
         }
-        this.calculateCollisions();
     }
 
-    private void calculateCollisions() {
+    private void resolveCollisionPairs(double dt) {
         for (PhysicsEntity e1 : this.collisionPairs.keySet()) {
             PhysicsEntity e2 = this.collisionPairs.get(e1);
 
             this.calculateVelocities(e1, e2);
-            this.correctPositions(e1, e2);
 
         }
         this.collisionPairs.clear();
     }
 
-    private void correctPositions(PhysicsEntity e1, PhysicsEntity e2) {
-
-    }
 
     private void calculateVelocities(PhysicsEntity e1, PhysicsEntity e2) {
         // Calc real coordinates
@@ -86,21 +78,33 @@ public class PhysicsEngine {
 
         // y diff
         float dy = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
+        float dx = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
+        float dz = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
 
-        if (dy < 0f) {
-            return;
-        }
         if (e1.getVelocity().y < e2.getVelocity().y) {
             dy *= -1;
 
         }
+
+        float threshold = 0f;
+
+        Global.data = Float.toString(dy);
+
         if (!e2.isStatic()) {
-            e2.getVelocity().y = dy * e1.getElasticity();
-            e2.getPosition().y += dy;
+            if (dy * e1.getElasticity() > threshold) {
+                e2.getVelocity().y = dy * e1.getElasticity() * 0.5f;
+            } else {
+                e2.getVelocity().y = 0;
+            }
+            e2.getPosition().y += dy + 0.1f;
         }
         if (!e1.isStatic()) {
-            e1.getVelocity().y = dy * e2.getElasticity();
-            e1.getPosition().y -= dy;
+            if (dy * e2.getElasticity() > threshold) {
+                e1.getVelocity().y = dy * e1.getElasticity() * 0.5f;
+            } else {
+                e1.getVelocity().y = 0;
+            }
+            e1.getPosition().y -= dy + 0.1f;
         }
 
     }
@@ -114,8 +118,9 @@ public class PhysicsEngine {
         entity.getRotation().y += entity.getRotationalVelocity().y * dt;
         entity.getRotation().z += entity.getRotationalVelocity().z * dt;
 
-
-        entity.getVelocity().y += this.config.gravity * dt;
+        if (!entity.isStatic()) {
+            entity.getVelocity().y += this.config.gravity * dt;
+        }
 
     }
 }

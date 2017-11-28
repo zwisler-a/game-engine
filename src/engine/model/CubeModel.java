@@ -58,11 +58,28 @@ public class CubeModel {
             0, 4, 1
     };
 
+    // TODO
+    private static float[] normalBufferData = {
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0,
+        0,1,0
+    };
+
     private static Model model;
 
     public static Model load() {
         if (model == null) {
-            model = Loader.loadToVAO(vertexBufferData, vertexBufferIndicies, textureBufferData, new float[]{});
+            Logger.debug("Loading coded CubeModel");
+            model = Loader.loadToVAO(vertexBufferData, vertexBufferIndicies, textureBufferData, normalBufferData);
         }
         return model;
     }
