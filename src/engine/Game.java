@@ -27,9 +27,10 @@ public abstract class Game extends GameLoop {
     @Override
     protected void init() {
         WindowManager.createWindow(gameSettings.windowDimensions.x, gameSettings.windowDimensions.y, gameSettings.backgroundColor);
-        renderer = new Renderer(gameSettings);
+        renderer = new Renderer();
         physicsEngine = new PhysicsEngine();
         this.load();
+        this.renderer.init(gameSettings);
     }
 
     @Override

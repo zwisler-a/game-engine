@@ -45,6 +45,28 @@ public class MainObject extends Game {
     public void load() {
         this.currentScene = new Scene();
 
+        // Splashscreen tests
+        /*
+        Texture[] screens = {
+                TextureLoader.loadTexture("res/splash/screen0.jpg"),
+                TextureLoader.loadTexture("res/splash/screen25.jpg"),
+                TextureLoader.loadTexture("res/splash/screen50.jpg"),
+                TextureLoader.loadTexture("res/splash/screen75.jpg"),
+                TextureLoader.loadTexture("res/splash/screen100.jpg")
+        };
+
+        for(int x=0;x<screens.length;x++){
+            this.renderer.renderOneImageScreen(screens[x]);
+            for (int i = 0; i < 9; i++) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+        */
+
+
         Terrain t = TerrainGenerator.generate(
                 "res/heightmap.png", 500, 500, 50,
                 TextureLoader.loadTexture("res/terrainTexture.png"));
@@ -58,11 +80,18 @@ public class MainObject extends Game {
         Entity e = new Entity();
         e.setRenderer(StaticRenderer.class);
         e.setModel(aliceModel);
-        e.setPosition(new Vector3f(0,0,0));
+        e.setPosition(new Vector3f(0, 0, 0));
         this.currentScene.add(e);
 
         WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
         this.currentScene.add(water);
+
+        /*
+        GuiElement guiElementWater = new GuiElement(water.getRefractionFbo().getDepthTexture(),
+                new Vector2f(-0.5f, -0.5f),
+                new Vector2f(0.25f, 0.25f));
+        this.currentScene.add(guiElementWater);
+        */
 
         FontAtlas font = FontLoader.loadFromSys("Monaco");
         text = new Text(font);
@@ -115,9 +144,11 @@ public class MainObject extends Game {
 
     }
 
-    public void tick(double deltaT) throws Exception{
+    public void tick(double deltaT) throws Exception {
         super.tick(deltaT);
         this.currentScene.getCamera().checkMovementInput(deltaT);
+
+        //Physiscs controlling
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_O)) {
             cube1.setPosition(new Vector3f(20, 50, 0));

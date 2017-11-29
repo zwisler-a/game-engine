@@ -29,12 +29,9 @@ public class WaterTile extends Entity implements Simulated {
                 .setDimensions(400, 400)
                 .addTexture()
                 .addDepthBuffer()
+                .addDepthTexture()
                 .create();
-        this.setModel(new TexturedModel(PlaneModel.load(),
-                new Texture(
-                        this.reflectionFbo.getTexture().getTextureId(),
-                        this.refractionFbo.getTexture().getTextureId())
-        ));
+
         this.setRenderer(WaterRenderer.class);
         this.setRotation(new Vector3f(0, 0, 0));
         this.setScale(scale);

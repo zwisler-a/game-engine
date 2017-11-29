@@ -1,5 +1,6 @@
 uniform sampler2D refractionTexture;
 uniform sampler2D reflectionTexture;
+uniform sampler2D refractionDepthTexture;
 uniform sampler2D dudvTexture;
 
 uniform vec3 lightColor[4];
@@ -24,7 +25,7 @@ void main(void) {
 
     vec3 viewVector = normalize(vecToCamera);
     float fresnelDot = dot(viewVector, vec3(0.0,1.0,0.0));
-    float fresnel = pow(fresnelDot,0.5);
+    float fresnel = pow(fresnelDot,0.1);
 
     vec2 ndc = ((vec2(clipSpace.x,clipSpace.y*-1.0)/clipSpace.w)/2.0 + 0.5);
 
@@ -37,15 +38,15 @@ void main(void) {
     vec2 refractionCoords = vec2(ndc.x,-ndc.y);
 
     reflectionCoords += distortion;
-    reflectionCoords = clamp(reflectionCoords, 0.001, 0.999);
+    reflectionCoords = clamp(reflectionCoords,0.001,0.999);
     refractionCoords += distortion;
     refractionCoords.x = clamp(refractionCoords.x, 0.001, 0.999);
     refractionCoords.y = clamp(refractionCoords.y, -0.999, -0.001);
 
     reflectionTextureColor = texture(reflectionTexture, reflectionCoords);
     refractionTextureColor = texture(refractionTexture, refractionCoords);
-    vec4 color = mix(reflectionTextureColor, refractionTextureColor,  fresnel);
-    color.x-=0.1;
-    color.y-=0.1;
+    vec4 color = mix(reflectionTextureColor, refractionTextureColor,  1);
+    float depth = pow(1,100);
     out_Color = color;
+    out_Color *= texture(refractionDepthTexture,refractionCoords);
 }

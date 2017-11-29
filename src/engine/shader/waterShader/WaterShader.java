@@ -24,6 +24,7 @@ public class WaterShader extends Shader {
     private int location_distortionMultipier;
     private int location_timeFactor;
     private int location_cameraPosition;
+    private int location_refractionDepthTexture;
 
     public WaterShader() {
         super(vertexShaderFile, fragmentShaderFile);
@@ -47,6 +48,7 @@ public class WaterShader extends Shader {
         location_dudvTexture = super.getUniformLocation("dudvTexture");
         location_timeFactor = super.getUniformLocation("timeFactor");
         location_cameraPosition = super.getUniformLocation("cameraPosition");
+        location_refractionDepthTexture = super.getUniformLocation("refractionDepthTexture");
         location_lightPos = new int[4];
         location_lightColor = new int[4];
         location_lightIntensity = new int[4];
@@ -62,6 +64,7 @@ public class WaterShader extends Shader {
         super.loadInt(this.location_reflectionTexture, 0);
         super.loadInt(this.location_refractionTexture, 1);
         super.loadInt(this.location_dudvTexture, 2);
+        super.loadInt(this.location_refractionDepthTexture, 3);
     }
 
     public void loadDistortionMultipier(float mul) {

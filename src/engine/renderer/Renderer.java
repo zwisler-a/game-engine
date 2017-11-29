@@ -5,9 +5,11 @@ import engine.Game;
 import engine.GameSettings;
 import engine.WindowManager;
 import engine.entity.GuiElement;
+import engine.model.Texture;
 import engine.model.loaders.TextureLoader;
 import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +18,7 @@ import org.lwjgl.opengl.GL30;
 import java.util.LinkedList;
 
 public class Renderer {
-    private final GameSettings gameSettings;
+    private GameSettings gameSettings;
     public StaticRenderer staticRenderer;
     public SkyboxRenderer skyboxRenderer;
     public WaterRenderer waterRenderer;
@@ -24,9 +26,12 @@ public class Renderer {
     private long lastLoopTime;
 
 
-    public Renderer(GameSettings settings) {
+    public Renderer() {
         this.guiRenderer = new GuiRenderer();
-        this.renderOneImageScreen();
+    }
+
+    public void init(GameSettings settings) {
+
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -41,13 +46,12 @@ public class Renderer {
         this.gameSettings = settings;
 
 
-
         this.lastLoopTime = System.nanoTime();
     }
 
-    private void renderOneImageScreen() {
+    public void renderOneImageScreen(Texture image) {
         GuiElement guiElement = new GuiElement(
-                TextureLoader.loadTexture("res/splashscreen.jpg"),
+                image,
                 new Vector2f(0f, 0f),
                 new Vector2f(1, 1), true);
         LinkedList<GuiElement> guiElements = new LinkedList<>();

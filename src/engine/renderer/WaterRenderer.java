@@ -5,6 +5,7 @@ import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.WaterTile;
 import engine.model.Model;
+import engine.model.PlaneModel;
 import engine.model.Texture;
 import engine.model.TexturedModel;
 import engine.model.loaders.TextureLoader;
@@ -30,7 +31,7 @@ public class WaterRenderer {
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-        this.waterRenderOptions = new RenderOptions(true, true, false, false,false);
+        this.waterRenderOptions = new RenderOptions(true, true, false, false, false);
         this.waterDuDvMap = TextureLoader.loadTexture("res/waterDuDv.png");
     }
 
@@ -49,11 +50,11 @@ public class WaterRenderer {
         shader.loadReflectionAndRefractionTexture();
 
         for (TexturedModel model : s.getEntities(WaterRenderer.class).keySet()) {
-            prepareTexturedModel(model);
             LinkedList<Entity> singleE = s.getEntities(WaterRenderer.class).get(model);
             for (Entity entity : singleE) {
+                prepareTexturedModel((WaterTile) entity);
                 prepareEntity(entity);
-                GL11.glDrawElements(GL11.GL_TRIANGLES, model.getModel().getIndiciesCount(), GL11.GL_UNSIGNED_INT, 0);
+                GL11.glDrawElements(GL11.GL_TRIANGLES, PlaneModel.load().getIndiciesCount(), GL11.GL_UNSIGNED_INT, 0);
             }
         }
         unbindTexturedModel();
@@ -83,19 +84,20 @@ public class WaterRenderer {
         );
     }
 
-    private void prepareTexturedModel(TexturedModel model) {
-        Model rawModel = model.getModel();
-        GL30.glBindVertexArray(rawModel.getVaoId());
+    private void prepareTexturedModel(WaterTile model) {
+        GL30.glBindVertexArray(PlaneModel.load().getVaoId());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, rawModel.getIndicesVBO());
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, PlaneModel.load().getIndicesVBO());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureId());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getReflectionFbo().getTexture().getTextureId());
         GL13.glActiveTexture(GL13.GL_TEXTURE1);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureId2());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getRefractionFbo().getTexture().getTextureId());
         GL13.glActiveTexture(GL13.GL_TEXTURE2);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.waterDuDvMap.getTextureId());
+        GL13.glActiveTexture(GL13.GL_TEXTURE3);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getRefractionFbo().getDepthTexture().getTextureId());
     }
 
     private void prepareEntity(Entity entity) {
