@@ -80,33 +80,31 @@ public class PhysicsEngine {
 
         // y diff
         float dy = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
-        float dx = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
-        float dz = (Math.min(p1.y, p3.y) - Math.max(p2.y, p4.y));
 
-        if (e1.getVelocity().y < e2.getVelocity().y) {
-            dy *= -1;
-
+        if (dy < 0.0001f) {
+            dy = 0;
         }
 
-        float threshold = 0f;
+        // direction check
+        if (e1.getVelocity().y < e2.getVelocity().y) {
+            dy *= -1;
+        }
+
+        float threshold = 0.0001f;
 
         Global.data = Float.toString(dy);
 
         if (!e2.isStatic()) {
-            if (dy * e1.getElasticity() > threshold) {
-                e2.getVelocity().y = dy * e1.getElasticity() * 0.5f;
-            } else {
-                e2.getVelocity().y = 0;
-            }
-            e2.getPosition().y += dy + 0.1f;
+            if (dy > threshold)
+                e2.getVelocity().y = dy * e1.getElasticity();
+
+            e2.getPosition().y += dy;
         }
         if (!e1.isStatic()) {
-            if (dy * e2.getElasticity() > threshold) {
-                e1.getVelocity().y = dy * e1.getElasticity() * 0.5f;
-            } else {
-                e1.getVelocity().y = 0;
-            }
-            e1.getPosition().y -= dy + 0.1f;
+            if (dy > threshold)
+                e1.getVelocity().y = dy * e1.getElasticity();
+
+            e1.getPosition().y -= dy;
         }
 
     }

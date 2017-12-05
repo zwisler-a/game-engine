@@ -24,9 +24,9 @@ public class Intersect {
      * @return true, if collision
      */
     public boolean CubeCube(Vector3f c1p, Vector3f c1s, Vector3f c2p, Vector3f c2s) {
-        return (c1p.x <= c2p.x + c2s.x && c1p.x + c1s.x >= c2p.x) &&
-                (c1p.y >= c2p.y + c2s.y && c1p.y + c1s.y <= c2p.y) &&
-                (c1p.z <= c2p.z + c2s.z && c1p.z + c1s.z >= c2p.z);
+        return (c1p.x < c2p.x + c2s.x && c1p.x + c1s.x > c2p.x) &&
+                (c1p.y > c2p.y + c2s.y && c1p.y + c1s.y < c2p.y) &&
+                (c1p.z < c2p.z + c2s.z && c1p.z + c1s.z > c2p.z);
     }
 
 }
