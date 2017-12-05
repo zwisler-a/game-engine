@@ -24,4 +24,8 @@ public class QueuedRenderer {
             queuedRenderCall.render();
         }
     }
+
+    public static boolean hasQueue() {
+        return QueuedRenderer.renderCalls.size() != 0;
+    }
 }

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 public class PhysicsEngine {
 
+    private HitBoxRenderer hitboxRenderer;
     private Intersect intersect;
     private LinkedList<PhysicsEntity> entities = new LinkedList<>();
     private HashMap<PhysicsEntity, PhysicsEntity> collisionPairs = new HashMap<>();
@@ -16,11 +17,11 @@ public class PhysicsEngine {
     public PhysicsEngine(PhysicsConfiguration config) {
         this.config = config;
         this.intersect = new Intersect();
+        this.hitboxRenderer = new HitBoxRenderer();
     }
 
     public PhysicsEngine() {
-        this.config = new PhysicsConfiguration();
-        this.intersect = new Intersect();
+        this(new PhysicsConfiguration());
     }
 
     public void addEntity(PhysicsEntity e) {
@@ -34,6 +35,7 @@ public class PhysicsEngine {
             this.detectCollisions(entity);
             this.resolveCollisionPairs(dt);
         }
+        this.hitboxRenderer.render(this.entities);
     }
 
 

@@ -46,25 +46,8 @@ public class MainObject extends Game {
         this.currentScene = new Scene();
 
         // Splashscreen tests
-        /*
-        Texture[] screens = {
-                TextureLoader.loadTexture("res/splash/screen0.jpg"),
-                TextureLoader.loadTexture("res/splash/screen25.jpg"),
-                TextureLoader.loadTexture("res/splash/screen50.jpg"),
-                TextureLoader.loadTexture("res/splash/screen75.jpg"),
-                TextureLoader.loadTexture("res/splash/screen100.jpg")
-        };
 
-        for(int x=0;x<screens.length;x++){
-            this.renderer.renderOneImageScreen(screens[x]);
-            for (int i = 0; i < 9; i++) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                }
-            }
-        }
-        */
+
 
 
         Terrain t = TerrainGenerator.generate(
@@ -118,73 +101,15 @@ public class MainObject extends Game {
         // ----------------------------------------------------------------------
         // ----------------------------------------------------------------------
 
-        Model cubeModel = ObjLoader.loadObjFile("res/cube.obj");
-        Texture cubeTexture = TextureLoader.loadTexture("res/cubeTextur.png");
-        TexturedModelStore.getInstance().add("test-cube", new TexturedModel(cubeModel, cubeTexture));
-
-        cube1 = new TestCube(this.physicsEngine);
-        this.currentScene.add(cube1);
-
-        cube2 = new TestCube(this.physicsEngine);
-        this.currentScene.add(cube2);
-
-
-        plane = new PhysicsEntity(new Vector3f(-5f, 0.5f, -5f), new Vector3f(10, -5, 10));
-        plane.setRenderer(StaticRenderer.class);
-        plane.setModel(new TexturedModel(
-                PlaneModel.load(),
-                TextureLoader.loadTexture("res/cubeTextur.png")
-        ));
-        plane.setStatic(true);
-        plane.setScale(5);
-        plane.setElasticity(1);
-        plane.setPosition(new Vector3f(20, 10, 0));
-        this.physicsEngine.addEntity(plane);
-        this.currentScene.add(plane);
-
     }
 
     public void tick(double deltaT) throws Exception {
         super.tick(deltaT);
         this.currentScene.getCamera().checkMovementInput(deltaT);
 
-        //Physiscs controlling
-
-        if (KeyboardHandler.isKeyDown(GLFW_KEY_O)) {
-            cube1.setPosition(new Vector3f(20, 50, 0));
-            cube1.setVelocity(new Vector3f(0));
-            cube2.setPosition(new Vector3f(25, 50, 0));
-            cube2.setVelocity(new Vector3f(0));
-        }
-        if (KeyboardHandler.isKeyDown(GLFW_KEY_I)) {
-            cube1.setPosition(new Vector3f(20, -50, 0));
-            cube1.setVelocity(new Vector3f(0));
-            cube2.setPosition(new Vector3f(25, -50, 0));
-            cube2.setVelocity(new Vector3f(0));
-        }
-        if (KeyboardHandler.isKeyDown(GLFW_KEY_P)) {
-            cube1.setVelocity(new Vector3f(0, 0.5f, 0));
-            cube2.setVelocity(new Vector3f(0, 0.5f, 0));
-        }
 
         text.setText("FPS:" + this.fps);
         text2.setText("PD1: " + Global.data);
         text3.setText("PD2: " + Global.data2);
     }
-
-    class TestCube extends PhysicsEntity {
-
-        public TestCube(PhysicsEngine physicsEngine) {
-            super(new Vector3f(-1f, 1f, -1f), new Vector3f(2, -2, 2));
-            TexturedModel tm = TexturedModelStore.getInstance().get("test-cube");
-            if (tm == null) {
-                throw new Error("Textured Model test-cube not loaded!");
-            }
-            this.setRenderer(StaticRenderer.class);
-            this.setModel(tm);
-            physicsEngine.addEntity(this);
-            this.setPosition(new Vector3f(20, -10, 0));
-        }
-    }
-
 }

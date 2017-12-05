@@ -36,7 +36,7 @@ public class WaterRenderer {
     }
 
     public void render(Scene s, Renderer renderer) {
-
+        if(s.getEntities(WaterRenderer.class) == null) return;
         for (TexturedModel model : s.getEntities(WaterRenderer.class).keySet()) {
             LinkedList<Entity> singleE = s.getEntities(WaterRenderer.class).get(model);
             for (Entity entity : singleE) {

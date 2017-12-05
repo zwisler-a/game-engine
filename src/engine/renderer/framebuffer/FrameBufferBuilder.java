@@ -1,6 +1,7 @@
 package engine.renderer.framebuffer;
 
 import common.Logger.Logger;
+import engine.WindowManager;
 import engine.model.Texture;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -8,6 +9,7 @@ import org.lwjgl.opengl.GL32;
 
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -27,6 +29,8 @@ public class FrameBufferBuilder {
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE) {
             Logger.error("FBO-Status-Error: " + fboStatus);
         }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, WindowManager.getWidth(), WindowManager.getHeight());
         return new FrameBuffer(this.frameBufferId, width, height, new Texture(this.textureId), new Texture(this.depthTextureId));
     }
 

@@ -45,8 +45,12 @@ void main(void) {
 
     reflectionTextureColor = texture(reflectionTexture, reflectionCoords);
     refractionTextureColor = texture(refractionTexture, refractionCoords);
-    vec4 color = mix(reflectionTextureColor, refractionTextureColor,  1);
+    vec4 color = mix(reflectionTextureColor, refractionTextureColor,  fresnel);
     float depth = pow(1,100);
+
+    color.x -= 0.1;
+    color.y -= 0.1;
+
     out_Color = color;
-    out_Color *= texture(refractionDepthTexture,refractionCoords);
+    //out_Color *= texture(refractionDepthTexture,refractionCoords);
 }

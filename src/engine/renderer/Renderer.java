@@ -1,15 +1,12 @@
 package engine.renderer;
 
-import common.Logger.Logger;
 import engine.Game;
 import engine.GameSettings;
 import engine.WindowManager;
 import engine.entity.GuiElement;
 import engine.model.Texture;
-import engine.model.loaders.TextureLoader;
 import engine.renderer.queued.QueuedRenderer;
 import engine.scene.Scene;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
@@ -65,9 +62,12 @@ public class Renderer {
             throw new Error("No Scene defined!");
         }
         if (options.queuedRenderer) {
+            // Render as much as the left time allows you too
+            // TODO: Take avg of other renderers into account ...
+            //  -- Maybe able to run queued renderer at the end?
             do {
                 QueuedRenderer.renderOnce();
-            } while (this.getTimeLeft() > 1000);
+            } while (this.getTimeLeft() > 10 && QueuedRenderer.hasQueue());
         }
         if (options.skyboxRenderer) {
             this.skyboxRenderer.render(scene.getCamera(), scene.getSkyboxTexture());
@@ -107,7 +107,6 @@ public class Renderer {
     }
 
     public long getTimeLeft() {
-        long timePassed = System.nanoTime() - lastLoopTime;
-        return (long) ((1f / gameSettings.targetFps) * 1000000) - timePassed;
+        return (lastLoopTime - System.nanoTime() + (1000000000 / gameSettings.targetFps)) / 1000000;
     }
 }
