@@ -20,21 +20,15 @@ import org.lwjgl.glfw.GLFW;
 import physics.PhysicsEngine;
 import physics.PhysicsEntity;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_I;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_O;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_P;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class MainObject extends Game {
 
-    static Entity arrow;
     public static Text text;
     private LightSource sun;
-    private PhysicsEntity cube1;
-    private PhysicsEntity plane;
     private Text text2;
     private Text text3;
-    private TexturedModel cubi;
-    private PhysicsEntity cube2;
+    private MenuScene menu;
 
     public MainObject(GameSettings gameSettings) {
         super(gameSettings);
@@ -45,9 +39,13 @@ public class MainObject extends Game {
     public void load() {
         this.currentScene = new Scene();
 
-        // Splashscreen tests
 
-
+        this.menu = new MenuScene();
+        GuiElement menuPoint = new GuiElement(
+                TextureLoader.loadTexture("res/close.png"),
+                new Vector2f(0, 0),
+                new Vector2f(0.5f, 0.1f), true);
+        this.menu.addGuiElement(menuPoint);
 
 
         Terrain t = TerrainGenerator.generate(
@@ -105,8 +103,15 @@ public class MainObject extends Game {
 
     public void tick(double deltaT) throws Exception {
         super.tick(deltaT);
-        this.currentScene.getCamera().checkMovementInput(deltaT);
+        if (!this.menu.isOpen()) {
+            this.currentScene.getCamera().checkMovementInput(deltaT);
+        }
 
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE) && !this.menu.isOpen()) {
+            this.currentScene = this.menu.loadMenu(this.currentScene);
+        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE) && this.menu.isOpen()) {
+            this.currentScene = this.menu.restore();
+        }
 
         text.setText("FPS:" + this.fps);
         text2.setText("PD1: " + Global.data);

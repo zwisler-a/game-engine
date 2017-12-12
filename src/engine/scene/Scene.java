@@ -12,12 +12,12 @@ import java.util.LinkedList;
 
 public class Scene {
 
-    private HashMap<Class, HashMap<TexturedModel, LinkedList<Entity>>> entities = new HashMap<>();
-    private Camera camera = new Camera(new Vector3f(), 0, 0, 0);
-    private LinkedList<LightSource> lightSources = new LinkedList<>();
-    private LinkedList<Simulated> simulatedEntities = new LinkedList<>();
-    private LinkedList<GuiElement> guiElements = new LinkedList<>();
-    private Texture skyboxTexture;
+    protected HashMap<Class, HashMap<TexturedModel, LinkedList<Entity>>> entities = new HashMap<>();
+    protected Camera camera = new Camera(new Vector3f(), 0, 0, 0);
+    protected LinkedList<LightSource> lightSources = new LinkedList<>();
+    protected LinkedList<Simulated> simulatedEntities = new LinkedList<>();
+    protected LinkedList<GuiElement> guiElements = new LinkedList<>();
+    protected Texture skyboxTexture;
 
     public Scene(){
         this.skyboxTexture = TextureLoader.loadTexture("res/skybox1.png");
@@ -93,5 +93,9 @@ public class Scene {
 
     public Texture getSkyboxTexture() {
         return skyboxTexture;
+    }
+
+    public HashMap<Class, HashMap<TexturedModel, LinkedList<Entity>>> getAllEntities() {
+        return entities;
     }
 }
