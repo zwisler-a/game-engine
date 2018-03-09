@@ -3,6 +3,8 @@ package engine.input;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import static org.lwjgl.glfw.GLFW.*;
 
+
+// TODO: Callback funktion
 public class KeyboardHandler extends GLFWKeyCallback{
 
     public static boolean[] keys = new boolean[65536];
