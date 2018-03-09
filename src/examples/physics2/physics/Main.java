@@ -1,16 +1,13 @@
-package examples.physics;
+package examples.physics2.physics;
 
 import common.Logger.LoggingLevel;
 import engine.GameBuilder;
-import sound.Player;
-
-import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
         new GameBuilder()
                 .setLoggingLevel(LoggingLevel.DEBUG)
-                .setWindowDimensions(400, 300)
+                .setWindowDimensions(1280, 860)
                 .setResolution(1280, 860)
                 .setBackgroundColor(0, 0, 0)
                 .setTargetFps(60)

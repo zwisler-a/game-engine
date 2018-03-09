@@ -1,9 +1,9 @@
 package common.Logger;
 
-import sun.misc.Queue;
-
-import java.io.*;
-import java.text.DateFormat;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -63,6 +63,20 @@ public class Logger {
         }
     }
 
+    public static void log(Object s) {
+        Log l = generateLog(s.toString(), LoggingLevel.LOG);
+        if (loggingLevel >= LOG) {
+            printLog(l);
+        }
+    }
+
+    public static void debug(Object s) {
+        Log l = generateLog(s.toString(), LoggingLevel.DEBUG);
+        if (loggingLevel >= DEBUG) {
+            printLog(l);
+        }
+    }
+
     private static void printLog(Log l) {
         System.out.format("%-64s%-32s%1s",
                 "[" + ANSI_GREEN + l.getCallee() + ANSI_RESET + ":" +
@@ -87,11 +101,13 @@ public class Logger {
     }
 
     public static boolean outputLogToFile(Exception exception) {
-        return outputLogToFile("log/" + new Date().getTime() + ".log", exception);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss_SSS");
+        return outputLogToFile("log/" + dateFormat.format(new Date()) + ".log", exception);
     }
 
     public static boolean outputLogToFile() {
-        return outputLogToFile("log/" + new Date().getTime() + ".log", null);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss_SSS");
+        return outputLogToFile("log/" + dateFormat.format(new Date()) + ".log", null);
     }
 
 

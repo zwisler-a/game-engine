@@ -1,40 +1,28 @@
 package examples.example1;
 
-import common.Logger.Logger;
 import engine.Game;
 import engine.GameSettings;
 import engine.Global;
 import engine.entity.*;
-import engine.input.KeyboardHandler;
-import engine.model.*;
+import engine.model.FontAtlas;
+import engine.model.TexturedModel;
 import engine.model.loaders.FontLoader;
 import engine.model.loaders.ObjLoader;
 import engine.model.loaders.TerrainGenerator;
 import engine.model.loaders.TextureLoader;
-import engine.model.store.TexturedModelStore;
 import engine.renderer.StaticRenderer;
 import engine.scene.Scene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
-import physics.PhysicsEngine;
-import physics.PhysicsEntity;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_I;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_O;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_P;
 
 public class MainObject extends Game {
 
     static Entity arrow;
     public static Text text;
     private LightSource sun;
-    private PhysicsEntity cube1;
-    private PhysicsEntity plane;
     private Text text2;
     private Text text3;
     private TexturedModel cubi;
-    private PhysicsEntity cube2;
 
     public MainObject(GameSettings gameSettings) {
         super(gameSettings);
@@ -65,6 +53,18 @@ public class MainObject extends Game {
         e.setModel(aliceModel);
         e.setPosition(new Vector3f(0, 0, 0));
         this.currentScene.add(e);
+
+
+        TexturedModel bastard = new TexturedModel(
+                ObjLoader.loadObjFile("res/asdf.obj"),
+                TextureLoader.loadTexture("res/asdf.png")
+        );
+        Entity fuck = new Entity();
+        fuck.setRenderer(StaticRenderer.class);
+        fuck.setModel(bastard);
+        fuck.setPosition(new Vector3f(10, 0, 0));
+        this.currentScene.add(fuck);
+
 
         WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
         this.currentScene.add(water);

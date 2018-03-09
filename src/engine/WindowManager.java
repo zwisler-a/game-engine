@@ -60,7 +60,7 @@ public class WindowManager {
             glfwGetWindowSize(window, pWidth, pHeight);
 
             // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetMonitors().get(0));
+            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
             // Center the window
             glfwSetWindowPos(
@@ -76,7 +76,6 @@ public class WindowManager {
         glfwSwapInterval(1);
 
 
-
         // Make the window visible
         glfwShowWindow(window);
 
@@ -87,9 +86,9 @@ public class WindowManager {
         glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, 0f);
 
 
-        glfwSetWindowSizeCallback(window, windowSizeCallback = new GLFWWindowSizeCallback(){
+        glfwSetWindowSizeCallback(window, windowSizeCallback = new GLFWWindowSizeCallback() {
             @Override
-            public void invoke(long window, int width, int height){
+            public void invoke(long window, int width, int height) {
                 WindowManager.width = width;
                 WindowManager.height = height;
 

@@ -19,7 +19,7 @@ public class Scene {
     private LinkedList<GuiElement> guiElements = new LinkedList<>();
     private Texture skyboxTexture;
 
-    public Scene(){
+    public Scene() {
         this.skyboxTexture = TextureLoader.loadTexture("res/skybox1.png");
     }
 
@@ -29,7 +29,7 @@ public class Scene {
 
 
     public void add(Entity e) {
-        if(e.getRenderer() == null){
+        if (e.getRenderer() == null) {
             Logger.warning("No renderer set for entity " + e.toString());
         }
         HashMap<TexturedModel, LinkedList<Entity>> rendererMap;
@@ -40,6 +40,10 @@ public class Scene {
             this.entities.put(e.getRenderer(), rendererMap);
         }
         this.putInRendererList(rendererMap, e);
+    }
+
+    public void remove(Entity e) {
+        this.entities.get(e.getRenderer()).get(e.getModel()).remove(e);
     }
 
     public void add(LightSource ls) {
