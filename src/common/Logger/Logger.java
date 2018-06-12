@@ -36,7 +36,7 @@ public class Logger {
     }
 
     public static void error(String s) {
-        Log l = generateLog(s, LoggingLevel.ERROR);
+        Log l = generateLog(ANSI_RED + s + ANSI_RESET, LoggingLevel.ERROR);
         if (loggingLevel >= ERROR) {
             printLog(l);
         }
@@ -102,6 +102,7 @@ public class Logger {
 
     public static boolean outputLogToFile(Exception exception) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss_SSS");
+        exception.printStackTrace();
         return outputLogToFile("log/" + dateFormat.format(new Date()) + ".log", exception);
     }
 

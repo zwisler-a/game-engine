@@ -25,6 +25,11 @@ public class StaticShader extends Shader {
         super(vertexShaderFile, fragmentShaderFile);
     }
 
+    public StaticShader(String vertexShaderFile, String fragmentShaderFile) {
+        super(vertexShaderFile, fragmentShaderFile);
+    }
+
+
     @Override
     protected void bindAttributes() {
         super.bindAttribut(0, "in_Position");

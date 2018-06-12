@@ -4,16 +4,18 @@ import engine.Game;
 import engine.GameSettings;
 import engine.Global;
 import engine.entity.*;
+import engine.input.KeyboardHandler;
 import engine.model.FontAtlas;
 import engine.model.TexturedModel;
-import engine.model.loaders.FontLoader;
-import engine.model.loaders.ObjLoader;
-import engine.model.loaders.TerrainGenerator;
-import engine.model.loaders.TextureLoader;
-import engine.renderer.StaticRenderer;
+import engine.model.collada.ColladaLoader;
+import engine.model.loaders.*;
+import engine.renderer.AnimatedModelRenderer;
 import engine.scene.Scene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_L;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_O;
 
 public class MainObject extends Game {
 
@@ -23,6 +25,7 @@ public class MainObject extends Game {
     private Text text2;
     private Text text3;
     private TexturedModel cubi;
+    private LightSource ls2;
 
     public MainObject(GameSettings gameSettings) {
         super(gameSettings);
@@ -36,15 +39,13 @@ public class MainObject extends Game {
         // Splashscreen tests
 
 
-
-
         Terrain t = TerrainGenerator.generate(
                 "res/heightmap.png", 500, 500, 50,
                 TextureLoader.loadTexture("res/terrainTexture.png"));
         t.setPosition(new Vector3f(-250, -50, -250));
         this.currentScene.add(t);
 
-        TexturedModel aliceModel = new TexturedModel(
+        /*TexturedModel aliceModel = new TexturedModel(
                 ObjLoader.loadObjFile("res/aliceV1.obj"),
                 TextureLoader.loadTexture("res/aliceV1.png")
         );
@@ -52,18 +53,19 @@ public class MainObject extends Game {
         e.setRenderer(StaticRenderer.class);
         e.setModel(aliceModel);
         e.setPosition(new Vector3f(0, 0, 0));
-        this.currentScene.add(e);
+        // this.currentScene.add(e);*/
 
 
-        TexturedModel bastard = new TexturedModel(
-                ObjLoader.loadObjFile("res/asdf.obj"),
-                TextureLoader.loadTexture("res/asdf.png")
+        TexturedModel aliceModel2 = new TexturedModel(
+                ColladaLoader.loadColladaFileAnimated("res/cowboy.dae"),
+                TextureLoader.loadTexture("res/cowboy.png")
         );
-        Entity fuck = new Entity();
-        fuck.setRenderer(StaticRenderer.class);
-        fuck.setModel(bastard);
-        fuck.setPosition(new Vector3f(10, 0, 0));
-        this.currentScene.add(fuck);
+        Entity alice = new Entity();
+        alice.setRenderer(AnimatedModelRenderer.class);
+        alice.setModel(aliceModel2);
+        alice.setPosition(new Vector3f(0, 0, 0));
+        alice.setRotation(new Vector3f(-90, 0, 0));
+        this.currentScene.add(alice);
 
 
         WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
@@ -94,8 +96,8 @@ public class MainObject extends Game {
         sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
 
-        LightSource ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
-        this.currentScene.add(ls2);
+        ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
+        //this.currentScene.add(ls2);
 
         // ----------------------------------------------------------------------
         // ----------------------------------------------------------------------
@@ -107,6 +109,14 @@ public class MainObject extends Game {
         super.tick(deltaT);
         this.currentScene.getCamera().checkMovementInput(deltaT);
 
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_O)) {
+            this.sun.setIntensity(this.sun.getIntensity() + .1f);
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_L)) {
+            this.sun.setIntensity(this.sun.getIntensity() - .1f);
+        }
+
+        ls2.setPosition(this.currentScene.getCamera().getPosition());
 
         text.setText("FPS:" + this.fps);
         text2.setText("PD1: " + Global.data);

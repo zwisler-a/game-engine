@@ -2,7 +2,6 @@ package examples.sound;
 
 import common.Logger.LoggingLevel;
 import engine.GameBuilder;
-import examples.physics.PhysicsTestGame;
 
 public class Main {
     public static void main(String[] args) {

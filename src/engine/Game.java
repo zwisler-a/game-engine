@@ -6,8 +6,6 @@ import engine.renderer.Renderer;
 import engine.scene.Scene;
 import physics.PhysicsEngine;
 
-import java.util.Date;
-
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Game extends GameLoop {
@@ -20,7 +18,7 @@ public abstract class Game extends GameLoop {
 
     public Game(GameSettings gameSettings) {
         Game.gameSettings = gameSettings;
-        this.renderOptions = new RenderOptions(true, true, true, true, true);
+        this.renderOptions = new RenderOptions(true, true, true, true, true, true);
         this.startGameLoop(gameSettings.targetFps);
     }
 
@@ -34,7 +32,7 @@ public abstract class Game extends GameLoop {
     }
 
     @Override
-    public void tick(double deltaT) throws Exception{
+    public void tick(double deltaT) throws Exception {
         // ------ Main Game Loop -------
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (this.currentScene != null) {

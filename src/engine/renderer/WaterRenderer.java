@@ -31,7 +31,7 @@ public class WaterRenderer {
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-        this.waterRenderOptions = new RenderOptions(true, true, false, false, false);
+        this.waterRenderOptions = new RenderOptions(true,true, true, false, false, false);
         this.waterDuDvMap = TextureLoader.loadTexture("res/waterDuDv.png");
     }
 

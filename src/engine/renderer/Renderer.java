@@ -21,6 +21,7 @@ public class Renderer {
     public WaterRenderer waterRenderer;
     public GuiRenderer guiRenderer;
     private long lastLoopTime;
+    private AnimatedModelRenderer animatedModelRenderer;
 
 
     public Renderer() {
@@ -37,6 +38,7 @@ public class Renderer {
 
         Matrix4f projectionMatrix = Renderer.createProjectionMatrix(Game.gameSettings.resolutionX, Game.gameSettings.resolutionY);
         this.staticRenderer = new StaticRenderer(projectionMatrix);
+        this.animatedModelRenderer = new AnimatedModelRenderer(projectionMatrix);
         this.skyboxRenderer = new SkyboxRenderer(projectionMatrix);
         this.waterRenderer = new WaterRenderer(projectionMatrix);
 
@@ -74,6 +76,9 @@ public class Renderer {
         }
         if (options.staticRenderer) {
             this.staticRenderer.render(scene.getEntities(StaticRenderer.class), scene.getLightSources(), scene.getCamera(), options);
+        }
+        if (options.animatedModelRenderer) {
+            this.animatedModelRenderer.render(scene.getEntities(AnimatedModelRenderer.class), scene.getLightSources(), scene.getCamera(), options);
         }
         if (options.waterRenderer) {
             this.waterRenderer.render(scene, this);

@@ -14,15 +14,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class StaticRenderer {
-    private StaticShader shader;
+    protected StaticShader shader;
 
     public StaticRenderer(Matrix4f projectionMatrix) {
         this.shader = new StaticShader();
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-
     }
+    public StaticRenderer() {
+    }
+
 
     public void render(HashMap<TexturedModel, LinkedList<Entity>> entities, LinkedList<LightSource> light, Camera cam, RenderOptions renderOptions) {
         shader.start();
@@ -45,7 +47,7 @@ public class StaticRenderer {
         shader.stop();
     }
 
-    private void loadShadowMaps(LinkedList<LightSource> lights) {
+    protected void loadShadowMaps(LinkedList<LightSource> lights) {
         for(LightSource light:lights){
             if(light.isShadowEnabled()){
                 GL13.glActiveTexture(GL13.GL_TEXTURE10);
@@ -54,7 +56,7 @@ public class StaticRenderer {
         }
     }
 
-    private void prepareTexturedModel(TexturedModel model) {
+    protected void prepareTexturedModel(TexturedModel model) {
         Model rawModel = model.getModel();
         GL30.glBindVertexArray(rawModel.getVaoId());
         GL20.glEnableVertexAttribArray(0);
@@ -65,12 +67,12 @@ public class StaticRenderer {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureId());
     }
 
-    private void prepareEntity(Entity entity) {
+    protected void prepareEntity(Entity entity) {
         Matrix4f transMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation().x, entity.getRotation().y, entity.getRotation().z, entity.getScale());
         shader.loadTransformationMatrix(transMatrix);
     }
 
-    private void unbindTexturedModel() {
+    protected void unbindTexturedModel() {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
@@ -79,7 +81,7 @@ public class StaticRenderer {
 
     }
 
-    public void cleanUp() {
+    protected void cleanUp() {
         shader.cleanUp();
     }
 

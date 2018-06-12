@@ -82,7 +82,7 @@ public class PhysicsTestGame extends Game {
             }
             this.currCubes.clear();
             for (Vector3f c : PhysicsEngine.wtf) {
-                DisplayCube cub = new DisplayCube(c, 0.5f);
+                DisplayCube cub = new DisplayCube(c, 0.1f);
                 this.currentScene.add(cub);
                 this.currCubes.add(cub);
             }

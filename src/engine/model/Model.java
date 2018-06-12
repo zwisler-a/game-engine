@@ -11,6 +11,13 @@ public class Model {
         this.indicesVBO = indicesVBO;
     }
 
+    public Model(Model model) {
+        this.vaoId = model.getVaoId();
+        this.indiciesCount = model.getIndiciesCount();
+        this.indicesVBO = model.getIndicesVBO();
+    }
+
+
     public int getVaoId() {
         return vaoId;
     }
