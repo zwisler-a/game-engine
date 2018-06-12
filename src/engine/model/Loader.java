@@ -54,7 +54,7 @@ public class Loader {
 
         GL15.glBindBuffer(type, vboId);
         GL15.glBufferData(type, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 4 * size, 0);
         GL15.glBindBuffer(type, 0);
     }
 
@@ -68,7 +68,7 @@ public class Loader {
 
         GL15.glBindBuffer(type, vboId);
         GL15.glBufferData(type, buffer, GL15.GL_STATIC_DRAW);
-        GL30.glVertexAttribIPointer(index, size, GL11.GL_INT, 0, 0);
+        GL30.glVertexAttribIPointer(index, size, GL11.GL_INT, 4 * size, 0);
         GL15.glBindBuffer(type, 0);
     }
 

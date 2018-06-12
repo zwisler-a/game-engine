@@ -1,7 +1,7 @@
 package engine.model.collada;
 
 import engine.model.Model;
-import engine.model.animation.AnimatedModel;
+import engine.model.AnimatedModel;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;

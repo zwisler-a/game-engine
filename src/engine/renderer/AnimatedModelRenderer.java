@@ -4,7 +4,7 @@ import common.Maths;
 import engine.entity.Entity;
 import engine.model.Model;
 import engine.model.TexturedModel;
-import engine.model.animation.AnimatedModel;
+import engine.model.AnimatedModel;
 import engine.shader.animatedModelShader.AnimatedModelShader;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.*;

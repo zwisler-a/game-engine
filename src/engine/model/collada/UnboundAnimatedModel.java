@@ -2,8 +2,8 @@ package engine.model.collada;
 
 import engine.model.Loader;
 import engine.model.Model;
-import engine.model.animation.AnimatedModel;
-import org.lwjgl.opengl.GL11;
+import engine.model.AnimatedModel;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
 public class UnboundAnimatedModel extends UnboundModel {
@@ -69,10 +69,10 @@ public class UnboundAnimatedModel extends UnboundModel {
     public AnimatedModel load() {
         Model model = Loader.loadToVAO(this.verticies, this.indicies, this.uvCoords, this.normals);
         GL30.glBindVertexArray(model.getVaoId());
-        Loader.loadVBO(this.jointIds, GL11.GL_INT, 3, 3);
-        Loader.loadVBO(this.weights, GL11.GL_FLOAT, 4, 3);
+        Loader.loadVBO(this.jointIds, GL15.GL_ARRAY_BUFFER, 3, 3);
+        Loader.loadVBO(this.weights, GL15.GL_ARRAY_BUFFER, 4, 3);
         GL30.glBindVertexArray(0);
-        return new AnimatedModel(model, this.skeleton.getJoints());
+        return new AnimatedModel(model, this.skeleton.getJoints(),this.skeleton.getRootJoint());
     }
 
 }

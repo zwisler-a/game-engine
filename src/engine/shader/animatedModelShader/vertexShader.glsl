@@ -46,7 +46,7 @@ void main(void) {
 
 	pass_TextureCoord = in_TextureCoord;
 	
-	out_normal = (transformationMatrix * vec4(in_normal,0)).xyz;
+	out_normal = (transformationMatrix * totalNormal).xyz;
 	for(int i=0;i<4;++i) {
 		out_toLight[i] = (lightPos[i] - worldPos.xyz);
 		distance[i] = length(lightPos[i] - worldPos.xyz);

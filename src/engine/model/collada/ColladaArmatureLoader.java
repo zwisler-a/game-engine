@@ -24,7 +24,7 @@ public class ColladaArmatureLoader {
 
         // Read joints and Hierarchy
 
-        List<Joint> joints = readJoints(controller);
+        List<Joint> joints = readJoints(controller, skeleton);
 
         skeleton.setJoints(joints);
 
@@ -41,7 +41,7 @@ public class ColladaArmatureLoader {
      * @return
      * @throws XPathExpressionException
      */
-    private static List<Joint> readJoints(Node controller) throws Exception {
+    private static List<Joint> readJoints(Node controller, Skeleton skeleton) throws Exception {
         Node jointsNode = (Node) xpath.evaluate("skin/joints", controller, XPathConstants.NODE);
         String jointsSourceId = ((Node) xpath.evaluate("input[@semantic='JOINT']", jointsNode, XPathConstants.NODE))
                 .getAttributes().getNamedItem("source").getTextContent();
@@ -56,8 +56,10 @@ public class ColladaArmatureLoader {
         for (int i = 0; i < jointNames.length; i++) {
             joints.add(new Joint(i, jointNames[i]));
         }
-        readJointNodeHierarchy(joints, (Node) xpath.evaluate("//visual_scene/node[@id='" + armatureName + "']/node", controller, XPathConstants.NODE));
+        Joint root = readJointNodeHierarchy(joints, (Node) xpath.evaluate("//visual_scene/node[@id='" + armatureName + "']/node", controller, XPathConstants.NODE));
+        skeleton.setRootJoint(root);
         readInverseBindMatrix(controller, joints, invBindMatrixId);
+        skeleton.setJoints(joints);
         return joints;
     }
 
@@ -114,7 +116,8 @@ public class ColladaArmatureLoader {
         int processedPointer = 0;
         int pointer = 0;
         for (int step : vcount) {
-            int ratio = 0;
+            float ratio = 0;
+            int countedValues = 0;
             for (int i = 0; i < MAX_WEIGHTS; i++) {
                 if (step > i) {
                     int jointId = v[pointer];
@@ -122,12 +125,15 @@ public class ColladaArmatureLoader {
                     processedJointIds[processedPointer] = jointId;
                     processedWeights[processedPointer++] = weightValue;
                     ratio += weightValue;
+                    pointer += 2;
+                    countedValues++;
                 } else {
-                    processedJointIds[processedPointer] = -1;
-                    processedWeights[processedPointer++] = -0;
+                    processedJointIds[processedPointer] = 0;
+                    processedWeights[processedPointer++] = 0;
                 }
             }
-            ratio /= MAX_WEIGHTS;
+            pointer += Math.max(0, (step - MAX_WEIGHTS)) * 2;
+            ratio /= countedValues;
             // Normalize
             for (int i = 0; i < MAX_WEIGHTS; i++) {
                 processedWeights[(processedPointer - (1 + i))] *= ratio;

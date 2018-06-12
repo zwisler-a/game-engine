@@ -8,6 +8,7 @@ public class Skeleton {
     private List<Joint> joints;
     private int[] jointIds;
     private float[] jointWights;
+    private Joint rootJoint;
 
     public List<Joint> getJoints() {
         return joints;
@@ -31,5 +32,13 @@ public class Skeleton {
 
     public void setJointWights(float[] jointWights) {
         this.jointWights = jointWights;
+    }
+
+    public Joint getRootJoint() {
+        return rootJoint;
+    }
+
+    public void setRootJoint(Joint rootJoint) {
+        this.rootJoint = rootJoint;
     }
 }
