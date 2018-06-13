@@ -27,9 +27,11 @@ public class MouseHandler {
 
         if (glfwGetMouseButton(windowId, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
             mouseLocked = true;
+            glfwSetInputMode(windowId, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
         if (glfwGetMouseButton(windowId, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
             mouseLocked = false;
+            glfwSetInputMode(windowId, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
 
         DoubleBuffer x = BufferUtils.createDoubleBuffer(1);

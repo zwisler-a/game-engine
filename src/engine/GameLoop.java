@@ -37,7 +37,6 @@ public abstract class GameLoop extends Thread {
                     fps = _fps;
                     _fps = 0;
                 }
-                delta = 1;
 
                 this.tick(delta);
 

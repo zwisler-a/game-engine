@@ -1,27 +1,31 @@
 package engine.model.animation;
 
+import java.util.HashMap;
+
 public class Animation {
-    private String name;
-    private KeyFrame[] keyFrames;
 
-    public Animation(String name, KeyFrame[] keyFrames) {
-        this.name = name;
-        this.keyFrames = keyFrames;
+    private final float length;//in seconds
+    private final HashMap<String,KeyFrame[]> keyFrames;
+    private double animationSpeed = 0.01f;
+
+    public Animation(float lengthInSeconds, HashMap<String,KeyFrame[]> frames) {
+        this.keyFrames = frames;
+        this.length = lengthInSeconds;
     }
 
-    public String getName() {
-        return name;
+    public float getLength() {
+        return length;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public KeyFrame[] getKeyFrames(Joint joint) {
+        return keyFrames.get(joint.getName());
     }
 
-    public KeyFrame[] getKeyFrames() {
-        return keyFrames;
+    public double getAnimationSpeed() {
+        return animationSpeed;
     }
 
-    public void setKeyFrames(KeyFrame[] keyFrames) {
-        this.keyFrames = keyFrames;
+    public void setAnimationSpeed(double animationSpeed) {
+        this.animationSpeed = animationSpeed;
     }
 }

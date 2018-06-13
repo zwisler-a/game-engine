@@ -1,7 +1,9 @@
 package engine.model.collada;
 
-import engine.model.Model;
+import engine.entity.AnimatedEntity;
 import engine.model.AnimatedModel;
+import engine.model.Model;
+import engine.model.animation.Animation;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -43,6 +45,25 @@ public class ColladaLoader {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    public static Animation loadAnimation(String path, AnimatedEntity model) {
+        return loadAnimation(path, (AnimatedModel) model.getModel().getModel());
+    }
+
+    public static Animation loadAnimation(String path, AnimatedModel model) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            NodeList document = builder.parse(path).getChildNodes();
+
+
+            return ColladaAnimationLoader.readAnimation(document, model.getRootJoint());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

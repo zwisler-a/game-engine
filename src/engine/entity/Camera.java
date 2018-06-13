@@ -35,47 +35,10 @@ public class Camera {
     }
 
     public void checkMovementInput(double dt) {
-        if (KeyboardHandler.isKeyDown(87)) {
-            this.position.x -= (float) (Math.sin((double) (-this.rotY) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-            this.position.z -= (float) (Math.cos((double) (-this.rotY) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-        }
-
-        if (KeyboardHandler.isKeyDown(83)) {
-            this.position.x += (float) (Math.sin((double) (-this.rotY) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-            this.position.z += (float) (Math.cos((double) (-this.rotY) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-        }
-
-        if (KeyboardHandler.isKeyDown(65)) {
-            this.position.x += (float) (Math.sin((double) (-this.rotY - 90.0F) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-            this.position.z += (float) (Math.cos((double) (-this.rotY - 90.0F) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-        }
-
-        if (KeyboardHandler.isKeyDown(68)) {
-            this.position.x += (float) (Math.sin((double) (-this.rotY + 90.0F) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-            this.position.z += (float) (Math.cos((double) (-this.rotY + 90.0F) * 3.141592653589793D / 180.0D) * (double) this.speed * dt);
-        }
-
-        if (KeyboardHandler.isKeyDown(32)) {
-            this.position.y += this.speed * dt;
-        }
-
-        if (KeyboardHandler.isKeyDown(341)) {
-            this.position.y -= this.speed * dt;
-        }
 
 
-        Vector2d deltas = MouseHandler.get();
-        float mouseDX = (float) deltas.y * -0.128F;
-        float mouseDY = (float) deltas.x * -0.128F;
-        if (this.rotX + mouseDX >= 360.0F) {
-            this.rotX += mouseDX - 360.0F;
-        } else if (this.rotX + mouseDX < 0.0F) {
-            this.rotX += mouseDX + 360.0F;
-        } else {
-            this.rotX += mouseDX;
-        }
 
-        this.rotY -= mouseDY;
+
 
     }
 

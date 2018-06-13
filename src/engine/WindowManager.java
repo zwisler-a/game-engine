@@ -85,7 +85,6 @@ public class WindowManager {
         // Set the clear color
         glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, 0f);
 
-
         glfwSetWindowSizeCallback(window, windowSizeCallback = new GLFWWindowSizeCallback() {
             @Override
             public void invoke(long window, int width, int height) {

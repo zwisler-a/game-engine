@@ -5,10 +5,14 @@ import engine.GameSettings;
 import engine.Global;
 import engine.entity.*;
 import engine.input.KeyboardHandler;
+import engine.model.AnimatedModel;
 import engine.model.FontAtlas;
 import engine.model.TexturedModel;
+import engine.model.animation.Animation;
 import engine.model.collada.ColladaLoader;
-import engine.model.loaders.*;
+import engine.model.loaders.FontLoader;
+import engine.model.loaders.TerrainGenerator;
+import engine.model.loaders.TextureLoader;
 import engine.renderer.AnimatedModelRenderer;
 import engine.scene.Scene;
 import org.joml.Vector2f;
@@ -56,20 +60,11 @@ public class MainObject extends Game {
         // this.currentScene.add(e);*/
 
 
-        TexturedModel aliceModel2 = new TexturedModel(
-                ColladaLoader.loadColladaFileAnimated("res/cowboy.dae"),
-                TextureLoader.loadTexture("res/cowboy.png")
-        );
-        Entity alice = new Entity();
-        alice.setRenderer(AnimatedModelRenderer.class);
-        alice.setModel(aliceModel2);
-        alice.setPosition(new Vector3f(0, 0, 0));
-        alice.setRotation(new Vector3f(-90, 0, 0));
-        this.currentScene.add(alice);
-
-
         WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
         this.currentScene.add(water);
+
+
+        new Player(this.currentScene, true, -5);
 
         /*
         GuiElement guiElementWater = new GuiElement(water.getRefractionFbo().getDepthTexture(),
@@ -83,14 +78,6 @@ public class MainObject extends Game {
 
         GuiElement guiElement = new GuiElement(text.getFbo().getTexture(), new Vector2f(-0.9f, 0.96f), new Vector2f(0.08f, 0.03f));
         this.currentScene.add(guiElement);
-
-        text2 = new Text(font);
-        GuiElement guiElement2 = new GuiElement(text2.getFbo().getTexture(), new Vector2f(-0.7f, 0.90f), new Vector2f(0.15f, 0.03f));
-        this.currentScene.add(guiElement2);
-
-        text3 = new Text(font);
-        GuiElement guiElement3 = new GuiElement(text3.getFbo().getTexture(), new Vector2f(-0.7f, 0.90f), new Vector2f(0.15f, 0.03f));
-        this.currentScene.add(guiElement3);
 
 
         sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
@@ -119,7 +106,5 @@ public class MainObject extends Game {
         ls2.setPosition(this.currentScene.getCamera().getPosition());
 
         text.setText("FPS:" + this.fps);
-        text2.setText("PD1: " + Global.data);
-        text3.setText("PD2: " + Global.data2);
     }
 }

@@ -48,4 +48,8 @@ public class Joint {
     public void setInverseBindTransform(Matrix4f inverseBindTransform) {
         this.inverseBindTransform = inverseBindTransform;
     }
+
+    public void setTransform(Matrix4f transform) {
+        this.transform = transform;
+    }
 }

@@ -25,6 +25,10 @@ public class AnimatedModel extends Model {
         return transforms;
     }
 
+    public List<Joint> getJoints() {
+        return joints;
+    }
+
     public Joint getRootJoint() {
         return this.rootJoint;
     }

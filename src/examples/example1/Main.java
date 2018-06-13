@@ -9,9 +9,9 @@ public class Main {
 
         new GameBuilder()
                 .setLoggingLevel(LoggingLevel.DEBUG)
-                .setWindowDimensions(800,600)
-                .setResolution(1280,860)
-                .setBackgroundColor(0,0,0)
+                .setWindowDimensions(800, 600)
+                .setResolution(1280, 800)
+                .setBackgroundColor(0, 0, 0)
                 .setTargetFps(60)
                 .start(MainObject.class);
     }

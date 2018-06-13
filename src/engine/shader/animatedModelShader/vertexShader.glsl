@@ -24,31 +24,42 @@ uniform vec3 lightPos[4];
 uniform mat4 jointTransforms[MAX_JOINTS];
 uniform sampler2DShadow depthSampler;
 
+
+void doLightCalculation(in vec4 position){
+    for(int i=0;i<4;++i) {
+		out_toLight[i] = (lightPos[i] - position.xyz);
+		distance[i] = length(lightPos[i] - position.xyz);
+	}
+}
+
+
+
 void main(void) {
 
+    // doAnimationTransform(in_Position,in_normal);
 
     vec4 totalLocalPos = vec4(0.0);
-	vec4 totalNormal = vec4(0.0);
+    vec4 totalNormal = vec4(0.0);
 
-	for(int i=0;i<MAX_WEIGHTS;i++){
-		mat4 jointTransform = jointTransforms[in_jointIds[i]];
+    for(int i=0;i<MAX_WEIGHTS;i++){
+    	mat4 jointTransform = jointTransforms[in_jointIds[i]];
 
-		vec4 posePosition = jointTransform * in_Position;
-		totalLocalPos += posePosition * in_weights[i];
+   		vec4 posePosition = jointTransform * in_Position;
+    	totalLocalPos += posePosition * in_weights[i];
 
-		vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
-		totalNormal += worldNormal * in_weights[i];
-	}
+   		vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
+   		totalNormal += worldNormal * in_weights[i];
+   	}
+
+
 
   	worldPos = transformationMatrix * totalLocalPos;
-    gl_ClipDistance[0] = dot(worldPos,clipPlane);
-	gl_Position = projectionMatrix * viewMatrix * worldPos;
+    gl_ClipDistance[0] = dot(worldPos, clipPlane);
 
 	pass_TextureCoord = in_TextureCoord;
-	
-	out_normal = (transformationMatrix * totalNormal).xyz;
-	for(int i=0;i<4;++i) {
-		out_toLight[i] = (lightPos[i] - worldPos.xyz);
-		distance[i] = length(lightPos[i] - worldPos.xyz);
-	}
+	out_normal = (transformationMatrix * vec4(totalNormal.xyz,0)).xyz;
+
+
+	doLightCalculation(worldPos);
+	gl_Position = projectionMatrix * viewMatrix * worldPos;
 }

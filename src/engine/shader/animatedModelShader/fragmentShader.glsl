@@ -12,6 +12,7 @@ varying out vec4 out_Color;
 
 void main(void) {
 
+    out_Color = vec4(out_normal,0);
 	vec3 unitNormal = normalize(out_normal);
 	vec3 totalDiffuse = vec3(0);
 	

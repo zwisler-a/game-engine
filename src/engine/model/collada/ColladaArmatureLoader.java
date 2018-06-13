@@ -2,6 +2,7 @@ package engine.model.collada;
 
 import engine.model.animation.Joint;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -13,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColladaArmatureLoader {
+
+    private static final Matrix4f CORRECTION =
+            new Matrix4f().rotate((float) Math.toRadians(-90), new Vector3f(1, 0, 0));
+
     private final static int MAX_WEIGHTS = 3;
     private static XPath xpath = XPathFactory.newInstance().newXPath();
 
@@ -25,10 +30,7 @@ public class ColladaArmatureLoader {
         // Read joints and Hierarchy
 
         List<Joint> joints = readJoints(controller, skeleton);
-
         skeleton.setJoints(joints);
-
-
         readWeightData(controller, skeleton);
         return skeleton;
     }
@@ -67,11 +69,15 @@ public class ColladaArmatureLoader {
         float[] fv = ColladaSourceLoader.readFloatArraySource((NodeList) controller, invBindMatrixId);
         for (int i = 0; i < joints.size() * 16; i += 16) {
             Matrix4f invBindMatrix = new Matrix4f(
-                    fv[i], fv[i + 4], fv[i + 8], fv[i + 12],
-                    fv[i + 1], fv[i + 5], fv[i + 9], fv[i + 13],
-                    fv[i + 2], fv[i + 6], fv[i + 10], fv[i + 14],
-                    fv[i + 3], fv[i + 7], fv[i + 11], fv[i + 15]
+                    fv[i], fv[i + 1], fv[i + 2], fv[i + 3],
+                    fv[i + 4], fv[i + 5], fv[i + 6], fv[i + 7],
+                    fv[i + 8], fv[i + 9], fv[i + 10], fv[i + 11],
+                    fv[i + 12], fv[i + 13], fv[i + 14], fv[i + 15]
             );
+            invBindMatrix.transpose();
+            invBindMatrix.invert();
+            CORRECTION.mul(invBindMatrix, invBindMatrix);
+            invBindMatrix.invert();
             joints.get(i / 16).setInverseBindTransform(invBindMatrix);
         }
     }
