@@ -2,10 +2,8 @@ package examples.example1;
 
 import engine.Game;
 import engine.GameSettings;
-import engine.Global;
 import engine.entity.*;
 import engine.input.KeyboardHandler;
-import engine.model.AnimatedModel;
 import engine.model.FontAtlas;
 import engine.model.TexturedModel;
 import engine.model.animation.Animation;
@@ -49,29 +47,12 @@ public class MainObject extends Game {
         t.setPosition(new Vector3f(-250, -50, -250));
         this.currentScene.add(t);
 
-        /*TexturedModel aliceModel = new TexturedModel(
-                ObjLoader.loadObjFile("res/aliceV1.obj"),
-                TextureLoader.loadTexture("res/aliceV1.png")
-        );
-        Entity e = new Entity();
-        e.setRenderer(StaticRenderer.class);
-        e.setModel(aliceModel);
-        e.setPosition(new Vector3f(0, 0, 0));
-        // this.currentScene.add(e);*/
-
 
         WaterTile water = new WaterTile(new Vector3f(0, -10, 0), 300, this.currentScene);
         this.currentScene.add(water);
 
 
         new Player(this.currentScene, true, -5);
-
-        /*
-        GuiElement guiElementWater = new GuiElement(water.getRefractionFbo().getDepthTexture(),
-                new Vector2f(-0.5f, -0.5f),
-                new Vector2f(0.25f, 0.25f));
-        this.currentScene.add(guiElementWater);
-        */
 
         FontAtlas font = FontLoader.loadFromSys("Monaco");
         text = new Text(font);
@@ -83,8 +64,19 @@ public class MainObject extends Game {
         sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
 
-        ls2 = new LightSource(new Vector3f(0, 1, 20), new Vector3f(255, 0, 255), .2f);
-        //this.currentScene.add(ls2);
+
+        TexturedModel cowBoyModel = new TexturedModel(
+                ColladaLoader.loadColladaFileAnimated("res/cowboy.dae"),
+                TextureLoader.loadTexture("res/cowboy.png")
+        );
+        AnimatedEntity cowBoy = new AnimatedEntity();
+        cowBoy.setModel(cowBoyModel);
+        cowBoy.setRenderer(AnimatedModelRenderer.class);
+        Animation walkingAnimation = ColladaLoader.loadAnimation("res/cowboy.dae", cowBoy);
+        cowBoy.getAnimator().doAnimation(walkingAnimation);
+        this.currentScene.registerSimulation(cowBoy);
+        this.currentScene.add(cowBoy);
+
 
         // ----------------------------------------------------------------------
         // ----------------------------------------------------------------------
@@ -102,8 +94,6 @@ public class MainObject extends Game {
         if (KeyboardHandler.isKeyDown(GLFW_KEY_L)) {
             this.sun.setIntensity(this.sun.getIntensity() - .1f);
         }
-
-        ls2.setPosition(this.currentScene.getCamera().getPosition());
 
         text.setText("FPS:" + this.fps);
     }

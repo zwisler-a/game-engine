@@ -1,9 +1,11 @@
 package engine.model.collada;
 
+import common.Logger.Logger;
 import engine.entity.AnimatedEntity;
 import engine.model.AnimatedModel;
 import engine.model.Model;
 import engine.model.animation.Animation;
+import engine.model.store.ModelStore;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -27,6 +29,13 @@ public class ColladaLoader {
 
     public static Model loadColladaFile(String path, boolean withSkeleton) {
         try {
+            Model modelStoreModel = ModelStore.getInstance().get(path);
+            if (modelStoreModel != null) {
+                Logger.debug("Retrieved model: " + path);
+                return modelStoreModel;
+            }
+            ModelStore.getInstance().get(path);
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             NodeList document = builder.parse(path).getChildNodes();
@@ -40,8 +49,11 @@ public class ColladaLoader {
             } else {
                 model = new UnboundModel();
             }
-            return ColladaGeometriesLoader.readGeometry(document, mesh, model);
+            Model boundModel = ColladaGeometriesLoader.readGeometry(document, mesh, model);
+            ModelStore.getInstance().add(path, boundModel);
+            return boundModel;
         } catch (Exception e) {
+            Logger.error("Error while loading Collada file! " + e.getMessage());
             e.printStackTrace();
         }
 
