@@ -32,6 +32,10 @@ public class ColladaLoader {
             Model modelStoreModel = ModelStore.getInstance().get(path);
             if (modelStoreModel != null) {
                 Logger.debug("Retrieved model: " + path);
+                if (modelStoreModel instanceof AnimatedModel) {
+                    Logger.debug("Instanciate model: " + path);
+                    return new AnimatedModel((AnimatedModel) modelStoreModel);
+                }
                 return modelStoreModel;
             }
             ModelStore.getInstance().get(path);

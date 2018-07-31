@@ -47,6 +47,7 @@ public class PhysicsEngine {
     }
 
     public static ArrayList<Vector3f> wtf;
+    public static ArrayList<Integer> wtfC;
 
     private void resolveCollision(LinkedList<Collision> collisions) {
         LinkedList<Collision> cols = sat.check(bodies);
@@ -61,16 +62,19 @@ public class PhysicsEngine {
                         -min.getAxis().x,
                         -min.getAxis().y,
                         -min.getAxis().z);
+                ArrayList<Vector3f> contactPoints = col.getContactPoints();
+                for (Vector3f point : contactPoints) {
+                    this.calcImpulseMagnitude(col.getPoly1(),
+                            col.getPoly2(),
+                            point,
+                            contactNormal);
+                }
 
-                this.calcImpulseMagnitude(col.getPoly1(),
-                        col.getPoly2(),
-                        col.getPoly1().getMinVector(min.getAxis()),
-                        contactNormal);
 
                 wtf = col.getContactPoints();
 
 
-                col.getPoly1().getPosition().sub(undo);
+                 col.getPoly1().getPosition().sub(undo);
             }
 
         }
@@ -107,11 +111,11 @@ public class PhysicsEngine {
 
         p1.getLinearMomentum().sub(force);
 
-        p1.getAngularMomentum().sub(new Vector3f(r1).cross(force));
+        p1.getAngularMomentum().sub(new Vector3f(r1).cross(force).mul(2));
 
-        //p1.updateMomentum();
+        p1.updateMomentum();
 
-        /*Vector3f v1 = new Vector3f(p1.getVelocity())
+       /* Vector3f v1 = new Vector3f(p1.getVelocity())
                 .sub(new Vector3f(contactNormal).mul(1 / p1.getMass()));
 
         Vector3f n1 = new Vector3f(p1.getVelocity()).mul(p1.getMass());

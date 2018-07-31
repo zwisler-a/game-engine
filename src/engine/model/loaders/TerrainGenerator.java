@@ -17,7 +17,16 @@ import java.io.IOException;
 
 public class TerrainGenerator {
 
-
+    /**
+     * Generates a new terrain with the given properties
+     *
+     * @param heightmap        Location of the heightmap to be used to generate the Terrain
+     * @param sizeX            Size on the x axis
+     * @param sizeZ            Size on the y acis
+     * @param verteciesPerSide How many verticies there should be on each side
+     * @param texture          Texture of the map
+     * @return A generated terrain
+     */
     public static Terrain generate(String heightmap, float sizeX, float sizeZ, int verteciesPerSide, Texture texture) {
 
         float xStride = sizeX / verteciesPerSide;
@@ -31,7 +40,7 @@ public class TerrainGenerator {
             heightMap = ImageIO.read(new File(heightmap));
         } catch (IOException e) {
             e.printStackTrace();
-            return new Terrain(null,null,null);
+            return new Terrain(null, null, null);
         }
 
         float heightmapSampleStride = (float) heightMap.getWidth() / verteciesPerSide;
@@ -104,6 +113,8 @@ public class TerrainGenerator {
 
         return terrain;
     }
+
+    // Helper classes
 
     private static int[] Vec3iToIntArray(Vector3i[] source) {
         int[] target = new int[source.length * 3];

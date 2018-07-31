@@ -16,10 +16,23 @@ import static org.lwjgl.opengl.GL11.*;
 public class TextureLoader {
     private static final int BYTES_PER_PIXEL = 4;//3 for RGB, 4 for RGBA
 
+    /**
+     * Loads and stores a texture
+     *
+     * @param path Location of the texture
+     * @return Texture
+     */
     public static Texture loadTexture(String path) {
         return loadTexture(path, TextureLoader.loadImage(path));
     }
 
+    /**
+     * Loads and stores a texture
+     *
+     * @param identifier most of the times the path of the texture. Used to retrieve a already loaded texture
+     * @param image      Image
+     * @return Texture
+     */
     public static Texture loadTexture(String identifier, BufferedImage image) {
 
         // Check if already loaded
@@ -74,6 +87,12 @@ public class TextureLoader {
         return texture;
     }
 
+    /**
+     * Loads a image
+     *
+     * @param loc Location of the image
+     * @return Buffered Image
+     */
     public static BufferedImage loadImage(String loc) {
         try {
             return ImageIO.read(new File(loc));

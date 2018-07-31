@@ -13,6 +13,9 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 import static org.lwjgl.opengl.GL30.*;
 
+/**
+ * Helper class to build a frame buffer
+ */
 public class FrameBufferBuilder {
 
     private int frameBufferId;
@@ -24,6 +27,12 @@ public class FrameBufferBuilder {
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, this.frameBufferId);
     }
 
+    /**
+     * Creates a new framebuffer with defined settings
+     * @param width Width
+     * @param height Height
+     * @return FrameBuffer object
+     */
     public FrameBuffer create(int width, int height) {
         int fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE) {
@@ -34,10 +43,22 @@ public class FrameBufferBuilder {
         return new FrameBuffer(this.frameBufferId, width, height, new Texture(this.textureId), new Texture(this.depthTextureId));
     }
 
+    /**
+     * Sets the dimensions of the Framebuffer and fixes it
+     * @param width width
+     * @param height height
+     * @return FrameBufferBuilder with fixed dimensions
+     */
     public FixedDimensionsFrameBufferBuilder setDimensions(int width, int height) {
         return new FixedDimensionsFrameBufferBuilder(width, height, this);
     }
 
+    /**
+     * Adds atexture to the frambuffer object
+     * @param width width of the texture
+     * @param height height of the texture
+     * @return this
+     */
     public FrameBufferBuilder addTexture(int width, int height) {
         this.textureId = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
@@ -49,6 +70,12 @@ public class FrameBufferBuilder {
         return this;
     }
 
+    /**
+     * Adds a depth texture to the framebuffer
+     * @param width width of the texture
+     * @param height height of the texture
+     * @return this
+     */
     public FrameBufferBuilder addDepthTexture(int width, int height) {
         this.depthTextureId = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.depthTextureId);
@@ -61,6 +88,12 @@ public class FrameBufferBuilder {
         return this;
     }
 
+    /**
+     * Adds a depth buffer to the framebuffer
+     * @param width width of the buffer
+     * @param height height of the buffer
+     * @return this
+     */
     public FrameBufferBuilder addDepthBuffer(int width, int height) {
         int depthBuffer = GL30.glGenRenderbuffers();
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthBuffer);
@@ -72,6 +105,9 @@ public class FrameBufferBuilder {
     }
 
 
+    /**
+     * Helper to use all methods without setting width and height for each method
+     */
     public class FixedDimensionsFrameBufferBuilder {
 
         private final int width;

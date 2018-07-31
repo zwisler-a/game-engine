@@ -11,14 +11,29 @@ public class Animator {
     private Animation currentAnimation;
     private float animationTime = 0;
 
+    private Animation transition;
+
     public boolean isAnimatring(){
         return this.currentAnimation != null;
     }
 
-
+    /**
+     * Runs an animation instantly
+     * @param animation Animation to run
+     */
     public void doAnimation(Animation animation) {
         this.currentAnimation = animation;
         this.animationTime = 0;
+    }
+
+    /**
+     * Interpolates between to animations
+     * Loops the next animation
+     * @param animation Animation
+     * @param length interpolation length
+     */
+    public void interpolateAnimation(Animation animation, float length){
+        this.transition = animation;
     }
 
     public void update(List<Joint> joints, Joint rootJoint, double dt) {

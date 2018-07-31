@@ -9,6 +9,9 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.glBindFramebuffer;
 
+/**
+ * Representation of a framebuffer object
+ */
 public class FrameBuffer {
 
     private final Texture depthTexture;

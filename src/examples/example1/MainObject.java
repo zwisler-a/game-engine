@@ -86,7 +86,7 @@ public class MainObject extends Game {
 
     public void tick(double deltaT) throws Exception {
         super.tick(deltaT);
-        this.currentScene.getCamera().checkMovementInput(deltaT);
+        //this.currentScene.getCamera().checkMovementInput(deltaT);
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_O)) {
             this.sun.setIntensity(this.sun.getIntensity() + .1f);

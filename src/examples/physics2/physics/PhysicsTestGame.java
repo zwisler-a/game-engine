@@ -1,9 +1,7 @@
 package examples.physics2.physics;
 
-import common.Logger.Logger;
 import engine.Game;
 import engine.GameSettings;
-import engine.entity.Entity;
 import engine.entity.LightSource;
 import engine.entity.Simulated;
 import engine.input.KeyboardHandler;
@@ -40,6 +38,7 @@ public class PhysicsTestGame extends Game {
         LightSource sun = new LightSource(new Vector3f(0, 255, 0), new Vector3f(255, 255, 255), 3);
         this.currentScene.add(sun);
 
+        new Player(this.currentScene, true, 0);
 
         Model cubeModel = ObjLoader.loadObjFile("res/cube.obj");
         Texture cubeTexture = TextureLoader.loadTexture("res/cubeTextur.png");
@@ -50,7 +49,8 @@ public class PhysicsTestGame extends Game {
             cube[i] = new TestCube(this.physicsEngine, this.currentScene);
         }
         cube[0].isStatic(true);
-        cube[0].setMass(50000);
+        cube[0].setMass(5);
+        cube[0].setScale(5);
         cube[0].setPosition(new Vector3f(0));
 
         cube[2].isStatic(true);
@@ -58,14 +58,10 @@ public class PhysicsTestGame extends Game {
         cube[2].setPosition(new Vector3f(-7, 12, 0));
 
 
-        cube[1].setRotation(new Vector3f(45, 0, 0));
-
+        cube[1].setRotation(new Vector3f(0, 0, 0));
+        cube[1].setMass(1);
         cube[1].setPosition(new Vector3f(0, 10, 0));
 
-
-        contactCube = new DisplayCube();
-        contactCube.setScale(0.25f);
-        this.currentScene.add(contactCube);
 
     }
 
@@ -73,7 +69,7 @@ public class PhysicsTestGame extends Game {
 
     public void tick(double deltaT) throws Exception {
         super.tick(deltaT);
-        this.currentScene.getCamera().checkMovementInput(deltaT);
+        //this.currentScene.getCamera().checkMovementInput(deltaT);
 
 
         if (PhysicsEngine.wtf != null) {
@@ -81,8 +77,14 @@ public class PhysicsTestGame extends Game {
                 this.currentScene.remove(cub);
             }
             this.currCubes.clear();
-            for (Vector3f c : PhysicsEngine.wtf) {
+            for (int i = 0; i < PhysicsEngine.wtf.size(); i++) {
+                Vector3f c = PhysicsEngine.wtf.get(i);
                 DisplayCube cub = new DisplayCube(c, 0.1f);
+                if (PhysicsEngine.wtfC != null) {
+                    if (PhysicsEngine.wtfC.size() > i) {
+                        cub.setColor(PhysicsEngine.wtfC.get(i));
+                    }
+                }
                 this.currentScene.add(cub);
                 this.currCubes.add(cub);
             }
@@ -102,15 +104,13 @@ public class PhysicsTestGame extends Game {
             cube[0].setPosition(new Vector3f(0));
             cube[1].setPosition(new Vector3f(0, 15, 0));
         }
-        if (KeyboardHandler.isKeyDown(GLFW_KEY_V)) {
-            cube[1].getPosition().x -= 0.1;
-        }
         if (KeyboardHandler.isKeyDown(GLFW_KEY_X)) {
             cube[1].getPosition().x += 0.1;
         }
         if (KeyboardHandler.isKeyDown(GLFW_KEY_T)) {
-            cube[1].getRotation().x++;
-            cube[1].getRotation().y++;
+            cube[1].getRotation().x = 45;
+            cube[1].getRotation().y = 45;
+            cube[1].getRotation().z = 0;
         }
         if (KeyboardHandler.isKeyDown(GLFW_KEY_F)) {
             cube[1].setPosition(new Vector3f(8, 10, 0));
@@ -139,6 +139,22 @@ public class PhysicsTestGame extends Game {
         if (KeyboardHandler.isKeyDown(GLFW_KEY_C)) {
             cube[1].setLinearMomentum(new Vector3f());
             cube[1].setAngularMomentum(new Vector3f());
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_V)) {
+            cube[1].setLinearMomentum(new Vector3f(0,-0.1f,0));
+            cube[1].setAngularMomentum(new Vector3f());
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_UP)) {
+            cube[1].getPosition().y += 0.1;
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_DOWN)) {
+            cube[1].getPosition().y -= 0.1;
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT)) {
+            cube[1].getRotation().y -= 0.5;
+        }
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_RIGHT)) {
+            cube[1].getRotation().z += 0.5;
         }
     }
 
@@ -170,6 +186,11 @@ public class PhysicsTestGame extends Game {
             scene.registerSimulation(this);
         }
 
+        public void setScale(float scale) {
+            super.setScale(scale);
+            this.setSize(new Vector3f(2 * scale, 2 * scale, 2 * scale));
+        }
+
         @Override
         public void simulate(double dt) {
             for (int i = 0; i < this.displayCube.length; i++) {
@@ -178,24 +199,6 @@ public class PhysicsTestGame extends Game {
         }
     }
 
-    class DisplayCube extends Entity {
-
-        public DisplayCube() {
-            this.setScale(0.01f);
-            TexturedModel tm = TexturedModelStore.getInstance().get("test-cube");
-            if (tm == null) {
-                throw new Error("Textured Model test-cube not loaded!");
-            }
-            this.setRenderer(StaticRenderer.class);
-            this.setModel(tm);
-        }
-
-        public DisplayCube(Vector3f pos, float size) {
-            this();
-            this.setPosition(pos);
-            this.setScale(size);
-        }
-    }
 
 }
 

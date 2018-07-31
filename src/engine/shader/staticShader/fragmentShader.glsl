@@ -22,7 +22,7 @@ void main(void) {
 		vec3 diffuse = brightness * lightColor[i] ;
 		totalDiffuse = totalDiffuse + diffuse;
 	} 
-	totalDiffuse = max(totalDiffuse,0.2);
+	totalDiffuse = max(totalDiffuse,0.8);
 	vec4 textureColor = texture(texture_diffuse, pass_TextureCoord);
 	if(textureColor.w <0.1){
 		discard;

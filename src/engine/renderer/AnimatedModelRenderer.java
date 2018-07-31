@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import common.Logger.Logger;
 import common.Maths;
 import engine.entity.Entity;
 import engine.model.Model;
@@ -20,6 +21,7 @@ public class AnimatedModelRenderer extends StaticRenderer {
 
     protected void prepareEntity(Entity entity) {
         ((AnimatedModelShader) shader).loadJointsMatrix(((AnimatedModel) entity.getModel().getModel()).getJointTransforms());
+        Matrix4f[] m = ((AnimatedModel) entity.getModel().getModel()).getJointTransforms();
         Matrix4f transMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation().x, entity.getRotation().y, entity.getRotation().z, entity.getScale());
         shader.loadTransformationMatrix(transMatrix);
     }

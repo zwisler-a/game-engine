@@ -22,6 +22,10 @@ public abstract class Game extends GameLoop {
         this.startGameLoop(gameSettings.targetFps);
     }
 
+    /**
+     * Initiates a new game. Opens a window and creates a new Renderer
+     * Also handles the first rendering for the display of a splashscreen
+     */
     @Override
     protected void init() {
         WindowManager.createWindow(gameSettings.windowDimensions.x, gameSettings.windowDimensions.y, gameSettings.backgroundColor);
@@ -31,6 +35,11 @@ public abstract class Game extends GameLoop {
         this.renderer.init(gameSettings);
     }
 
+    /**
+     * Updates the game and triggers the renderer
+     * @param deltaT Time passed since last call
+     * @throws Exception Catches and logs thrown errors. Game stops
+     */
     @Override
     public void tick(double deltaT) throws Exception {
         // ------ Main Game Loop -------
@@ -56,5 +65,9 @@ public abstract class Game extends GameLoop {
         }
     }
 
+    /**
+     * Initialisation of the game data.
+     * Loading models/textures ...
+     */
     public abstract void load();
 }

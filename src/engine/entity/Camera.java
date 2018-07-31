@@ -6,19 +6,18 @@
 package engine.entity;
 
 
-import engine.SwingWindows.DataDisplay;
-import engine.input.KeyboardHandler;
-import engine.input.MouseHandler;
 import org.joml.Matrix4f;
-import org.joml.Vector2d;
 import org.joml.Vector3f;
 
+/**
+ * Represents a certain view on the world
+ */
 public class Camera {
     private Vector3f position;
     private float rotX;
     private float rotY;
     private float rotZ;
-    private float speed = 0.5f;
+
 
     public Camera(Vector3f position, float rotX, float rotY, float rotZ) {
         this.position = position;
@@ -32,14 +31,6 @@ public class Camera {
         this.rotX = c.getRotX();
         this.rotY = c.getRotY();
         this.rotZ = c.getRotZ();
-    }
-
-    public void checkMovementInput(double dt) {
-
-
-
-
-
     }
 
     public Vector3f getPosition() {
@@ -74,6 +65,11 @@ public class Camera {
         this.position = pos;
     }
 
+    /**
+     * Generates a view matrix out of the perspective of a given camera
+     * @param c Camera
+     * @return View matrix
+     */
     public static Matrix4f createViewMatrix(Camera c) {
         Matrix4f viewMatrix = new Matrix4f();
         viewMatrix.identity();
@@ -86,6 +82,12 @@ public class Camera {
         return viewMatrix;
     }
 
+    /**
+     * Create a view matrix with the given position and rotation
+     * @param position Position
+     * @param rotation Rotation
+     * @return View matrix
+     */
     public static Matrix4f createViewMatrix(Vector3f position, Vector3f rotation) {
         Matrix4f viewMatrix = new Matrix4f();
         viewMatrix.identity();
@@ -99,6 +101,11 @@ public class Camera {
     }
 
 
+    /**
+     * Create a view matrix ignoring the position. Used for GUI
+     * @param c Camera
+     * @return View matrix
+     */
     public static Matrix4f createViewMatrixWithoutPosition(Camera c) {
         Matrix4f viewMatrix = new Matrix4f();
         viewMatrix.identity();

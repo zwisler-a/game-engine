@@ -1,9 +1,11 @@
 package engine.entity;
 
-import common.Logger.Logger;
 import engine.model.AnimatedModel;
 import engine.model.animation.Animator;
 
+/**
+ * Entity which is able to run an animation
+ */
 public class AnimatedEntity extends Entity implements Simulated {
 
     protected Animator animator;

@@ -12,7 +12,7 @@ import static common.Logger.LoggingLevel.*;
 
 public class Logger {
 
-
+    // Constants for coloring the log
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_BLACK = "\u001B[30m";
     private static final String ANSI_RED = "\u001B[31m";
@@ -23,7 +23,9 @@ public class Logger {
     private static final String ANSI_CYAN = "\u001B[36m";
     private static final String ANSI_WHITE = "\u001B[37m";
 
-
+    /**
+     * Level at witch events should be triggered
+     */
     public static int loggingLevel = WARNING;
 
     private static LinkedList<Log> log = new LinkedList<>();
@@ -100,18 +102,32 @@ public class Logger {
         return trace.getLineNumber();
     }
 
+    /**
+     * Writes the complete log into a logfile in case of a crash
+     * @param exception Last catched exception
+     * @return success or failure (true/false)
+     */
     public static boolean outputLogToFile(Exception exception) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss_SSS");
         exception.printStackTrace();
         return outputLogToFile("log/" + dateFormat.format(new Date()) + ".log", exception);
     }
 
+    /**
+     * Writes the complete log into a logfile in case of a crash
+     * @return uccess or failure (true/false)
+     */
     public static boolean outputLogToFile() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss_SSS");
         return outputLogToFile("log/" + dateFormat.format(new Date()) + ".log", null);
     }
 
-
+    /**
+     * Writes the complete log into a logfile in case of a crash
+     * @param path Location of the logfile
+     * @param exception Last catched exception
+     * @return success or failure (true/false)
+     */
     public static boolean outputLogToFile(String path, Exception exception) {
         File file = new File(path);
         try {

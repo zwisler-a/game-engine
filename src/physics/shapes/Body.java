@@ -172,4 +172,5 @@ public abstract class Body extends Entity {
     }
 
 
+    public abstract ArrayList<ArrayList<Vector3f>> getFacesPointingTo(Vector3f vector3f);
 }

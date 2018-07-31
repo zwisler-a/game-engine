@@ -22,6 +22,13 @@ public class Joint {
         this.children = new ArrayList<>();
     }
 
+    public Joint(Joint joint) {
+        this.id = joint.getId();
+        this.name = joint.getName();
+        this.children = new ArrayList<>();
+        this.inverseBindTransform = joint.getInverseBindTransform();
+    }
+
     public int getId() {
         return id;
     }

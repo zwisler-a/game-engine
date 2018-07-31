@@ -1,6 +1,5 @@
 package engine.entity;
 
-import common.Maths;
 import engine.model.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;

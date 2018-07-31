@@ -3,8 +3,11 @@ package physics.shapes;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import physics.PhysicsEngine;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cube extends Body {
 
@@ -12,6 +15,10 @@ public class Cube extends Body {
     private Vector3f size;
 
     public Cube(Vector3f size) {
+        this.size = size;
+    }
+
+    public void setSize(Vector3f size){
         this.size = size;
     }
 
@@ -42,10 +49,14 @@ public class Cube extends Body {
 
     @Override
     void calcNormals() {
-        normals = new Vector3f[3];
+        normals = new Vector3f[6];
         normals[0] = new Vector3f(0, 0, 1);
         normals[1] = new Vector3f(0, 1, 0);
         normals[2] = new Vector3f(1, 0, 0);
+
+        normals[3] = new Vector3f(0, 0, -1);
+        normals[4] = new Vector3f(0, -1, 0);
+        normals[5] = new Vector3f(-1, 0, 0);
 
         Matrix4f mat = new Matrix4f();
         mat.rotateX((float) Math.toRadians(this.getRotation().x));
@@ -67,6 +78,52 @@ public class Cube extends Body {
         }
 
         return face;
+    }
+
+    @Override
+    public ArrayList<ArrayList<Vector3f>> getFacesPointingTo(Vector3f refNormal) {
+        this.calcNormals();
+
+        ArrayList<Vector3f> norm = new ArrayList<>();
+        for (Vector3f normal : normals) {
+            if (normal.dot(refNormal) > 0) {
+                norm.add(normal);
+            }
+        }
+        ArrayList<ArrayList<Vector3f>> faces = new ArrayList<>();
+        for (Vector3f normal : norm) {
+            faces.add(this.getFaceOfNormal(normal));
+        }
+
+        // Display
+
+        /*
+        ArrayList<Vector3f> vecs = new ArrayList<>();
+        int k = 0;
+        PhysicsEngine.wtfC = new ArrayList<>();
+
+
+        for (List<Vector3f> vecsL : faces) {
+            for (Vector3f v : vecsL) {
+                vecs.add(v);
+                PhysicsEngine.wtfC.add((k) % 3);
+            }
+            k++;
+        }
+        PhysicsEngine.wtf = vecs;
+
+
+        for (Vector3f normal : norm) {
+            for (int i = 0; i < 5; i++) {
+                Vector3f dm = new Vector3f(normal).normalize();
+                vecs.add(new Vector3f(dm).mul(i));
+            }
+
+        }
+
+        */
+        // -----------
+        return faces;
     }
 
     @Override

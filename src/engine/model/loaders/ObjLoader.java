@@ -16,6 +16,12 @@ public class ObjLoader {
     private static float[] verticesArray;
     private static int[] indicesArray;
 
+    /**
+     * Reads and parses a .obj file
+     *
+     * @param file File to load
+     * @return The model in the obj file
+     */
     public static Model loadObjFile(String file) {
         try {
 

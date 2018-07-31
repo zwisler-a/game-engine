@@ -34,6 +34,7 @@ void doLightCalculation(in vec4 position){
 
 
 
+
 void main(void) {
 
     // doAnimationTransform(in_Position,in_normal);
